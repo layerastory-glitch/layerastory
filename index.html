@@ -1,0 +1,2388 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#FFFFFF">
+<meta name="referrer" content="no-referrer">
+<meta name="robots" content="noindex,nofollow">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23A4192B'/%3E%3Ctext x='32' y='47' font-size='42' text-anchor='middle' fill='white' font-family='Georgia,serif' font-style='italic'%3EL%3C/text%3E%3C/svg%3E">
+<title>Layera Story</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  const tok = (n) => `rgb(var(--${n}) / <alpha-value>)`;
+  tailwind.config = {
+    theme: {
+      extend: {
+        colors: {
+          bg: tok('bg'), tint: tok('tint'), surface: tok('surface'), ink: tok('ink'), mute: tok('mute'), line: tok('line'),
+          accent: tok('accent'), 'on-accent': tok('on-accent'), 'accent-soft': tok('accent-soft'),
+          good: tok('good'), 'good-soft': tok('good-soft'),
+          warn: tok('warn'), 'warn-soft': tok('warn-soft'),
+          bad: tok('bad'), 'bad-soft': tok('bad-soft'),
+        },
+        fontFamily: {
+          sans: ['"Plus Jakarta Sans"', 'ui-sans-serif', 'system-ui', 'Segoe UI', 'Roboto', 'sans-serif'],
+          serif: ['"Cormorant Garamond"', 'Georgia', 'Times New Roman', 'serif'],
+        },
+      },
+    },
+  };
+</script>
+<style>
+  :root {
+    --bg: 255 255 255; --surface: 255 255 255; --tint: 250 246 239; --ink: 43 29 26; --mute: 122 106 99; --line: 230 219 200;
+    --accent: 164 25 43; --on-accent: 255 248 240; --accent-soft: 246 225 220;
+    --good: 47 107 63; --good-soft: 229 238 220;
+    --warn: 154 98 0; --warn-soft: 248 232 198;
+    --bad: 190 52 24; --bad-soft: 250 224 214;
+    color-scheme: light;
+    box-sizing: border-box;
+    padding-top: env(safe-area-inset-top, 0px);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+  ::selection { background: rgb(var(--accent) / 0.22); }
+  html { scroll-padding-top: env(safe-area-inset-top, 0px); height: 100%; }
+  body { margin: 0; min-height: 100%; background: rgb(var(--bg)); color: rgb(var(--ink)); font-family: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif; -webkit-font-smoothing: antialiased; }
+  input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  input[type=number] { -moz-appearance: textfield; }
+  /* Bilah gulir putih untuk daftar pesanan */
+  .scroll-white { scrollbar-width: thin; scrollbar-color: #D9CFBD #ffffff; background: #ffffff; }
+  .scroll-white::-webkit-scrollbar { width: 10px; height: 10px; background: #ffffff; }
+  .scroll-white::-webkit-scrollbar-track { background: #ffffff; }
+  .scroll-white::-webkit-scrollbar-thumb { background: #D9CFBD; border-radius: 9999px; border: 2px solid #ffffff; }
+  .scroll-white::-webkit-scrollbar-thumb:hover { background: #C9BCA4; }
+  .scroll-white::-webkit-scrollbar-corner { background: #ffffff; }
+  button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid rgb(var(--accent)); outline-offset: 2px; }
+
+  /* Lembar invoice selalu terang, apa pun tema perangkat */
+  .sheet {
+    --surface: 255 255 255; --ink: 43 29 26; --mute: 122 106 99; --line: 230 219 200;
+    --accent: 164 25 43; --accent-soft: 247 232 226; --on-accent: 255 248 240;
+    --good: 47 107 63; --good-soft: 229 238 220; --warn: 154 98 0; --warn-soft: 248 232 198; --bad: 190 52 24; --bad-soft: 250 224 214;
+    color: rgb(43 29 26);
+  }
+
+  @media print {
+    @page { size: A4; margin: 0; }
+    :root { padding: 0 !important; }
+    html, body { background: #fff !important; height: auto !important; overflow: visible !important; }
+    .no-print { display: none !important; }
+    .print-flush { padding: 0 !important; margin: 0 !important; max-width: none !important; }
+    .break-avoid { break-inside: avoid; }
+    .modal-shell { position: static !important; inset: auto !important; background: none !important; overflow: visible !important; padding: 0 !important; }
+    .sheet { box-shadow: none !important; margin: 0 !important; border-radius: 0 !important; width: 210mm !important; max-width: none !important; min-height: 297mm !important; padding: 14mm !important; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react/18.3.1/umd/react.production.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/18.3.1/umd/react-dom.production.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/htm@3.1.1/dist/htm.umd.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+<script>window.PDFLib || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"><\/script>');</script>
+<script>window.qrcode || document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcode-generator/1.4.4/qrcode.min.js"><\/script>');</script>
+<script src="config.js"></script>
+<script>window.APP_CONFIG && window.APP_CONFIG.SUPABASE_URL && document.write('<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"><\/script>');</script>
+<script>
+(() => {
+  const { useState, useEffect, useMemo, useRef, useLayoutEffect } = React;
+
+  /* Konfigurasi opsional dari config.js (lihat README). Tanpa config.js aplikasi berjalan dalam mode lokal terenkripsi. */
+  const CFG = window.APP_CONFIG || {};
+  const WANT_SB = !!(CFG.SUPABASE_URL && CFG.SUPABASE_ANON_KEY); // mode Supabase
+  const SEED_DEMO = CFG.SEED_DEMO !== false;                       // isi data contoh saat pertama kali
+
+  /* ---------- JSX-style helper (htm) ---------- */
+  const h = (type, props, ...children) => {
+    if (props && props.class !== undefined) { props = { ...props, className: props.class }; delete props.class; }
+    return React.createElement(type, props, ...children);
+  };
+  const html = htm.bind(h);
+
+  /* ---------- Utilitas ---------- */
+  const num = (v) => Number(v) || 0;
+  const rupiah = (n) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(num(n));
+  const pct = (n) => (isFinite(n) ? n : 0).toLocaleString('id-ID', { maximumFractionDigits: 1 }) + '%';
+  const fmtDate = (s) => (s ? new Date(s + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' }) : '-');
+  const fmtShort = (s) => (s ? new Date(s + 'T00:00:00').toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) : '-');
+  const isoDate = (d) => { const z = new Date(d.getTime() - d.getTimezoneOffset() * 60000); return z.toISOString().slice(0, 10); };
+  const todayISO = () => isoDate(new Date());
+  const MONTHS = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+  const MONTHS_SHORT = ['Jan', 'Feb', 'Mar', 'Apr', 'Mei', 'Jun', 'Jul', 'Agu', 'Sep', 'Okt', 'Nov', 'Des'];
+  const monthTitle = (key) => `${MONTHS[Number(key.slice(5, 7)) - 1]} ${key.slice(0, 4)}`;
+  const groupByMonth = (rows) => {
+    const groups = [];
+    rows.forEach((o) => {
+      const key = o.tanggal.slice(0, 7);
+      let last = groups[groups.length - 1];
+      if (!last || last.key !== key) { last = { key, rows: [] }; groups.push(last); }
+      last.rows.push(o);
+    });
+    return groups;
+  };
+  const daysUntil = (iso) => Math.round((new Date(iso + 'T00:00:00') - new Date(todayISO() + 'T00:00:00')) / 86400000);
+  const hTag = (o) => {
+    if (!o.tanggalAcara) return null;
+    const d = daysUntil(o.tanggalAcara);
+    if (d === 0) return { label: 'Hari H', cls: 'bg-accent text-on-accent' };
+    if (d > 0 && d <= 7) return { label: 'H-' + d, cls: 'bg-warn-soft text-warn' };
+    return null;
+  };
+  const addDays = (iso, n) => { const d = new Date(iso + 'T00:00:00'); d.setDate(d.getDate() + n); return isoDate(d); };
+
+  const load = (k, fallback) => { try { const v = localStorage.getItem(k); return v ? JSON.parse(v) : fallback; } catch (e) { return fallback; } };
+  const save = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) { /* abaikan */ } };
+  const KEY_O = 'aksara.orders.v3';
+  const KEY_O_V2 = 'aksara.orders.v2';
+  const KEY_O_V1 = 'aksara.orders.v1';
+  const KEY_S = 'aksara.settings.v1';
+
+
+  /* ---------- Kode verifikasi unik (untuk QR code) ---------- */
+  const KODE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // tanpa 0/O/1/I agar mudah dibaca
+  const KODE_LEN = 10;
+  const genKode = () => {
+    const a = new Uint32Array(KODE_LEN);
+    try { crypto.getRandomValues(a); } catch (e) { for (let i = 0; i < KODE_LEN; i++) a[i] = Math.floor(Math.random() * 4294967296); }
+    return Array.from(a, (n) => KODE_CHARS[n % KODE_CHARS.length]).join('');
+  };
+  // Pesanan lama tanpa kode: turunkan kode tetap dari nomor invoice (selalu sama untuk invoice yang sama)
+  const kodeFor = (o) => {
+    if (o.kode) return o.kode;
+    let x = 2166136261;
+    for (const ch of String(o.id)) { x ^= ch.charCodeAt(0); x = Math.imul(x, 16777619) >>> 0; }
+    let out = '';
+    for (let i = 0; i < KODE_LEN; i++) { x = (Math.imul(x, 1664525) + 1013904223) >>> 0; out += KODE_CHARS[(x >>> 16) % KODE_CHARS.length]; }
+    return out;
+  };
+  const uniqueKode = (orders) => { let k; do { k = genKode(); } while (orders.some((o) => kodeFor(o) === k)); return k; };
+  const fmtKode = (k) => k.slice(0, 5) + '-' + k.slice(5);
+
+  /* ---------- Domain ---------- */
+  // Item pesanan: jenis (Softcover, Hardcover, ...) dan nama produk dipisah, tiap baris punya jumlah x harga satuan
+  // Pengeluaran: baris bebas (nama diketik manual) dengan jumlah, satuan, harga satuan, dan total
+  const KATEGORI = [
+    { key: 'hpp', title: 'HPP', hint: 'bahan baku dan material', suggest: ['Kertas', 'Pita', 'Foil', 'Plastik', 'Amplop', 'Tinta'] },
+    { key: 'produksi', title: 'Produksi', hint: 'ongkos cetak, desain, kirim, dan lain-lain', suggest: ['Ongkos cetak / sablon', 'Ongkos desain', 'Ongkos kirim', 'Lain-lain'] },
+  ];
+  const UNITS = ['pcs', 'lembar', 'roll', 'meter', 'kg', 'pak', 'set', 'paket', 'jam', 'hari'];
+  const lineTotal = (l) => (l.total !== undefined && l.total !== null ? num(l.total) : num(l.qty) * num(l.price));
+  const sumLines = (arr) => (arr || []).reduce((a, l) => a + lineTotal(l), 0);
+  const orderTotal = (o) => sumLines(o.items);
+  const orderQty = (o) => (o.items || []).reduce((a, l) => a + num(l.qty), 0);
+  const orderCost = (o) => sumLines(o.expenses);
+  const costPerPcs = (o) => (orderQty(o) ? orderCost(o) / orderQty(o) : 0);
+  const orderProfit = (o) => orderTotal(o) - orderCost(o);
+  const paidAmount = (o) => (o.status === 'lunas' ? orderTotal(o) : o.status === 'dp' ? Math.min(num(o.dp), orderTotal(o)) : 0);
+  const itemTitle = (l) => [l.jenis, l.produk].filter(Boolean).join(' – ');
+  const itemsText = (o) => (o.items || []).map(itemTitle).join(' ');
+  const orderSummary = (o) => {
+    const it = o.items || [];
+    return it.length ? itemTitle(it[0]) + (it.length > 1 ? ` +${it.length - 1} lainnya` : '') : '-';
+  };
+
+  const PROGRESS = [
+    { key: 'belum', label: 'Belum dikerjakan', cls: 'bg-tint text-mute' },
+    { key: 'desain', label: 'Tahap desain', cls: 'bg-accent-soft text-accent' },
+    { key: 'cetak', label: 'Tahap cetak', cls: 'bg-accent-soft text-accent' },
+    { key: 'produksi', label: 'Tahap produksi', cls: 'bg-accent-soft text-accent' },
+    { key: 'selesai', label: 'Selesai', cls: 'bg-good-soft text-good' },
+  ];
+  const progressOf = (o) => PROGRESS.find((x) => x.key === o.progress) || PROGRESS[0];
+  const progressIdx = (o) => PROGRESS.findIndex((x) => x.key === progressOf(o).key);
+  const STATUS = {
+    lunas: { label: 'Lunas', cls: 'bg-good-soft text-good' },
+    dp: { label: 'DP', cls: 'bg-warn-soft text-warn' },
+    belum: { label: 'Belum bayar', cls: 'bg-bad-soft text-bad' },
+  };
+  const PAGE_SIZE = 8; // maksimal pesanan per halaman
+
+  const DEFAULT_SETTINGS = {
+    nama: 'Layera Story',
+    tagline: 'Percetakan dan Undangan Pernikahan',
+    alamat: 'Jl. Melati No. 12, Kota Anda',
+    kontak: 'WhatsApp 0812-0000-0000',
+    bank: 'Bank BCA',
+    rekening: '123 456 7890',
+    atasNama: 'Layera Story',
+    catatan: 'Pesanan mulai dikerjakan setelah DP diterima. Pelunasan paling lambat saat undangan diambil atau dikirim.',
+    penandatangan: 'Admin Layera Story',
+    satuan: [...UNITS],
+    saranHpp: [...KATEGORI[0].suggest],
+    saranProduksi: [...KATEGORI[1].suggest],
+  };
+
+  const I = (jenis, produk, qty, price, ket = '') => ({ jenis, produk, qty, price, ket });
+  const E = (kategori, nama, qty, satuan, price) => ({ kategori, nama, qty, satuan, price });
+  const seedBase = () => [
+    { id: 'INV-202609-001', tanggal: '2026-09-04', deadline: '2026-09-25', tanggalAcara: '2026-10-04', nama: 'Rina & Dimas', wa: '0812-3456-7801', alamat: 'Jl. Kenanga No. 7, Blok B', status: 'lunas', dp: 0,
+      items: [I('Softcover', 'Floral Navy', 250, 9500), I('Digital Video', 'Video undangan 1 menit', 1, 475000, 'Musik latar dan nama pengantin')],
+      expenses: [E('hpp', 'Kertas art carton', 300, 'lembar', 1750), E('hpp', 'Pita satin', 300, 'pcs', 500), E('hpp', 'Foil emas', 300, 'pcs', 600),
+        E('hpp', 'Plastik pembungkus', 300, 'pcs', 200), E('hpp', 'Amplop', 300, 'pcs', 800),
+        E('produksi', 'Ongkos cetak', 300, 'pcs', 1400), E('produksi', 'Ongkos desain', 1, 'paket', 150000), E('produksi', 'Ongkos kirim', 1, 'paket', 90000)] },
+    { id: 'INV-202609-002', tanggal: '2026-09-12', deadline: '2026-10-03', tanggalAcara: '2026-10-12', nama: 'Nadia & Fajar', wa: '0857-2211-4490', alamat: 'Perumahan Griya Asri A-15', status: 'dp', dp: 1800000,
+      items: [I('Hardcover', 'Navy Emboss', 150, 18000), I('Hardcover', 'Burgundy Foil', 50, 18000)],
+      expenses: [E('hpp', 'Kertas art carton', 200, 'lembar', 3500), E('hpp', 'Pita satin', 200, 'pcs', 1100), E('hpp', 'Foil emas', 200, 'pcs', 1750),
+        E('hpp', 'Plastik pembungkus', 200, 'pcs', 400), E('hpp', 'Amplop', 200, 'pcs', 1000),
+        E('produksi', 'Ongkos cetak', 200, 'pcs', 3250), E('produksi', 'Ongkos desain', 1, 'paket', 200000), E('produksi', 'Ongkos kirim', 1, 'paket', 120000), E('produksi', 'Packing dus', 1, 'paket', 50000)] },
+    { id: 'INV-202610-001', tanggal: '2026-10-01', deadline: '2026-10-20', tanggalAcara: '2026-11-08', nama: 'Keluarga Bpk. Hendra', wa: '0813-9000-1122', alamat: 'Jl. Merdeka No. 45', status: 'belum', dp: 0,
+      items: [I('Akrilik', 'Akrilik Bening Gold', 100, 25000)],
+      expenses: [E('hpp', 'Bahan akrilik', 100, 'pcs', 7000), E('hpp', 'Plastik pembungkus', 100, 'pcs', 500),
+        E('produksi', 'Ongkos cetak', 100, 'pcs', 6000), E('produksi', 'Ongkos desain', 1, 'paket', 100000), E('produksi', 'Ongkos kirim', 1, 'paket', 80000)] },
+    { id: 'INV-202610-002', tanggal: '2026-10-03', deadline: '2026-10-10', tanggalAcara: '2026-10-10', nama: 'Sinta & Arga', wa: '0821-7788-3300', alamat: 'Online (kirim via email)', status: 'lunas', dp: 0,
+      items: [I('Digital Video', 'Video undangan 2 menit', 1, 1500000)],
+      expenses: [E('produksi', 'Ongkos desain', 1, 'paket', 450000), E('produksi', 'Lisensi musik', 1, 'paket', 100000)] },
+    { id: 'INV-202610-003', tanggal: '2026-10-04', deadline: '2026-10-14', tanggalAcara: '2026-10-20', nama: 'Maya & Bagas', wa: '0878-4545-6061', alamat: 'Online (kirim via email)', status: 'dp', dp: 600000,
+      items: [I('Website', 'Website undangan Premium', 1, 1200000, 'Domain atas nama klien')],
+      expenses: [E('hpp', 'Domain dan hosting', 1, 'paket', 150000), E('produksi', 'Ongkos desain', 1, 'paket', 300000)] },
+  ];
+
+  const seedOrders = () => {
+    const pr = { 'INV-202609-001': 'selesai', 'INV-202609-002': 'produksi', 'INV-202610-001': 'desain', 'INV-202610-002': 'selesai', 'INV-202610-003': 'belum' };
+    return seedBase().map((o) => ({ ...o, progress: pr[o.id] || 'belum' }));
+  };
+
+  // Migrasi data lama: v1 (biaya = total pesanan) -> v2 (biaya per undangan) -> v3 (item + baris pengeluaran)
+  const migrateV1 = (list) => list.map((o) => {
+    const q = Math.max(1, num(o.qty));
+    const cost = {};
+    Object.keys(o.cost || {}).forEach((k) => { cost[k] = k === 'kirim' ? num(o.cost[k]) : Math.round(num(o.cost[k]) / q); });
+    return { ...o, cost };
+  });
+  const OLD_COST = { kertas: ['hpp', 'Kertas'], pita: ['hpp', 'Pita'], foil: ['hpp', 'Foil'], plastik: ['hpp', 'Plastik'], amplop: ['hpp', 'Amplop'],
+    cetak: ['produksi', 'Ongkos cetak / sablon'], desain: ['produksi', 'Ongkos desain'], lain: ['produksi', 'Lain-lain'], kirim: ['produksi', 'Ongkos kirim'] };
+  const migrateV2 = (list) => list.map((o) => {
+    if (o.items) return o;
+    const { cost = {}, produk, qty, price, ...rest } = o;
+    const q = Math.max(1, num(qty));
+    return {
+      ...rest,
+      items: [{ jenis: produk || 'Undangan', produk: 'Undangan pernikahan', qty: num(qty), price: num(price) }],
+      expenses: Object.keys(OLD_COST).filter((k) => num(cost[k]) > 0).map((k) => ({
+        kategori: OLD_COST[k][0], nama: OLD_COST[k][1], qty: k === 'kirim' ? 1 : q, satuan: k === 'kirim' ? 'paket' : 'pcs', price: num(cost[k]) })),
+    };
+  });
+  const initOrders = () => {
+    const v3 = load(KEY_O, null);
+    if (v3) return v3;
+    const v2 = load(KEY_O_V2, null);
+    if (v2) return migrateV2(v2);
+    const v1 = load(KEY_O_V1, null);
+    return v1 ? migrateV2(migrateV1(v1)) : (SEED_DEMO ? seedOrders() : []);
+  };
+
+  const nextInvoiceId = (orders, dateStr) => {
+    const prefix = `INV-${dateStr.slice(0, 7).replace('-', '')}-`;
+    const max = orders.filter((o) => o.id.startsWith(prefix)).reduce((m, o) => Math.max(m, parseInt(o.id.slice(prefix.length), 10) || 0), 0);
+    return prefix + String(max + 1).padStart(3, '0');
+  };
+
+  /* ---------- Ikon (gaya Lucide, inline SVG) ---------- */
+  const ICONS = {
+    plus: ['M5 12h14', 'M12 5v14'],
+    'chevron-left': ['m15 18-6-6 6-6'],
+    'chevron-down': ['m6 9 6 6 6-6'],
+    chart: ['M3 3v18h18', 'm19 9-5 5-4-4-3 3'],
+    clipboard: ['M8 2h8v4H8z', 'M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2', 'M12 11h4', 'M12 16h4', 'M8 11h.01', 'M8 16h.01'],
+    lock: ['M5 11h14a1 1 0 0 1 1 1v8a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8a1 1 0 0 1 1-1Z', 'M8 11V7a4 4 0 0 1 8 0v4'],
+    key: ['m21 2-2 2m-7.61 7.61a5.5 5.5 0 1 1-7.778 7.778 5.5 5.5 0 0 1 7.777-7.777zm0 0L15.5 7.5m0 0 3 3L22 7l-3-3m-3.5 3.5L19 4'],
+    eye: ['M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z', 'M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z'],
+    'eye-off': ['M9.88 9.88a3 3 0 1 0 4.24 4.24', 'M10.73 5.08A10.43 10.43 0 0 1 12 5c7 0 10 7 10 7a13.16 13.16 0 0 1-1.67 2.68', 'M6.61 6.61A13.526 13.526 0 0 0 2 12s3 7 10 7a9.74 9.74 0 0 0 5.39-1.61', 'm2 2 20 20'],
+    'log-out': ['M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4', 'm16 17 5-5-5-5', 'M21 12H9'],
+    shield: ['M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z', 'm9 12 2 2 4-4'],
+    download: ['M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4', 'm7 10 5 5 5-5', 'M12 15V3'],
+    file: ['M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z', 'M14 2v4a2 2 0 0 0 2 2h4'],
+    message: ['M7.9 20A9 9 0 1 0 4 16.1L2 22Z'],
+    bell: ['M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9', 'M10.3 21a1.94 1.94 0 0 0 3.4 0'],
+    'chevron-right': ['m9 18 6-6-6-6'],
+    x: ['M18 6 6 18', 'm6 6 12 12'],
+    trash: ['M3 6h18', 'M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6', 'M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2'],
+    pencil: ['M17 3a2.85 2.83 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z'],
+    printer: ['M6 9V2h12v7', 'M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2', 'M6 14h12v8H6z'],
+    search: ['M3 11a8 8 0 1 0 16 0 8 8 0 1 0-16 0', 'm21 21-4.3-4.3'],
+    settings: ['M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z', 'M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1Z'],
+    receipt: ['M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1Z', 'M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8', 'M12 17.5v-11'],
+    reset: ['M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8', 'M3 3v5h5'],
+    check: ['M20 6 9 17l-5-5'],
+    inbox: ['M22 12h-6l-2 3h-4l-2-3H2', 'M5.45 5.11 2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11Z'],
+  };
+  const Icon = ({ name, size = 18, className = '' }) => html`
+    <svg xmlns="http://www.w3.org/2000/svg" width=${size} height=${size} viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" class=${className} aria-hidden="true">
+      ${ICONS[name].map((d, i) => html`<path key=${i} d=${d} />`)}
+    </svg>`;
+
+  /* ---------- Komponen dasar ---------- */
+  const inp = 'w-full rounded-lg border border-line bg-tint px-3 py-2 text-sm text-ink placeholder:text-mute focus:border-accent focus:outline-none';
+  const btn = 'inline-flex items-center justify-center gap-2 rounded-lg px-3.5 py-2 text-sm font-semibold transition-colors';
+  const btnPrimary = `${btn} bg-accent text-on-accent hover:opacity-90`;
+  const btnGhost = `${btn} border border-line bg-surface text-ink hover:bg-tint`;
+
+  const Badge = ({ status }) => html`<span class="inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${STATUS[status].cls}">${STATUS[status].label}</span>`;
+
+  const Field = ({ label, hint, error, children, className = '' }) => html`
+    <label class="block ${className}">
+      <span class="mb-1 block text-xs font-semibold text-mute">${label}</span>
+      ${children}
+      ${hint && !error && html`<span class="mt-1 block text-xs text-mute">${hint}</span>`}
+      ${error && html`<span class="mt-1 block text-xs font-medium text-bad">${error}</span>`}
+    </label>`;
+
+  // Input angka bulat dengan pemisah ribuan titik (nilai yang disimpan = string digit)
+  const fmtDigits = (d) => (d === '' || d === undefined || d === null ? '' : Number(d).toLocaleString('id-ID'));
+  function NumInput({ value, onChange, prefix, placeholder = '0', label }) {
+    const ref = useRef(null);
+    const caret = useRef(null);
+    useLayoutEffect(() => {
+      if (caret.current !== null && ref.current && document.activeElement === ref.current) ref.current.setSelectionRange(caret.current, caret.current);
+      caret.current = null;
+    });
+    const handle = (e) => {
+      const raw = e.target.value;
+      const pos = e.target.selectionStart == null ? raw.length : e.target.selectionStart;
+      const before = raw.slice(0, pos).replace(/\D/g, '').length;
+      const digits = raw.replace(/\D/g, '').replace(/^0+(?=\d)/, '');
+      const formatted = fmtDigits(digits);
+      let c = 0, seen = 0;
+      while (c < formatted.length && seen < before) { if (/\d/.test(formatted[c])) seen++; c++; }
+      caret.current = c;
+      onChange(digits);
+    };
+    return html`
+      <div class="relative">
+        ${prefix && html`<span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-xs text-mute">${prefix}</span>`}
+        <input ref=${ref} type="text" inputMode="numeric" autoComplete="off" aria-label=${label} placeholder=${placeholder}
+          value=${fmtDigits(value)} onChange=${handle} class="${inp} tabular-nums ${prefix ? 'pl-9' : ''}" />
+      </div>`;
+  }
+  const MoneyInput = (props) => html`<${NumInput} prefix="Rp" ...${props} />`;
+
+  // Kolom isian dengan daftar pilihan yang SELALU menampilkan semua opsi saat dibuka; tetap boleh diketik manual
+  function Combo({ value, onChange, options, placeholder, label }) {
+    const [open, setOpen] = useState(false);
+    const [filtering, setFiltering] = useState(false);
+    const box = useRef(null);
+    useEffect(() => {
+      if (!open) return;
+      const away = (e) => { if (box.current && !box.current.contains(e.target)) setOpen(false); };
+      document.addEventListener('mousedown', away);
+      document.addEventListener('touchstart', away);
+      return () => { document.removeEventListener('mousedown', away); document.removeEventListener('touchstart', away); };
+    }, [open]);
+    const q = value.trim().toLowerCase();
+    const list = filtering && q ? options.filter((o) => o.toLowerCase().includes(q)) : options;
+    const show = () => { setFiltering(false); setOpen(true); };
+    return html`
+      <div class="relative" ref=${box}>
+        <input class="${inp} pr-8" value=${value} placeholder=${placeholder} aria-label=${label} autoComplete="off" role="combobox" aria-expanded=${open}
+          onFocus=${show} onClick=${show}
+          onChange=${(e) => { setFiltering(true); setOpen(true); onChange(e.target.value); }}
+          onKeyDown=${(e) => { if (e.key === 'Escape' && open) { e.nativeEvent.stopPropagation(); setOpen(false); } }} />
+        <button type="button" tabIndex="-1" aria-label=${'Tampilkan pilihan ' + label} onClick=${() => { setFiltering(false); setOpen(!open); }}
+          class="absolute right-1 top-1/2 -translate-y-1/2 rounded p-1 text-mute hover:text-ink"><${Icon} name="chevron-down" size=${16} /></button>
+        ${open && list.length > 0 && html`
+          <ul class="absolute z-30 mt-1 max-h-52 w-full overflow-auto rounded-lg border border-line bg-surface py-1 shadow-lg" role="listbox">
+            ${list.map((o) => html`
+              <li key=${o}>
+                <button type="button" role="option" aria-selected=${o === value} onMouseDown=${(e) => e.preventDefault()} onClick=${() => { onChange(o); setOpen(false); }}
+                  class="block w-full px-3 py-1.5 text-left text-sm hover:bg-tint ${o === value ? 'font-semibold text-accent' : ''}">${o}</button>
+              </li>`)}
+          </ul>`}
+      </div>`;
+  }
+
+  // Editor daftar pilihan (dipakai di Pengaturan)
+  function ListEditor({ label, hint, items, onChange, placeholder }) {
+    const [text, setText] = useState('');
+    const add = () => {
+      const t = text.trim();
+      if (!t) return;
+      if (!items.some((x) => x.toLowerCase() === t.toLowerCase())) onChange([...items, t]);
+      setText('');
+    };
+    return html`
+      <div class="sm:col-span-2">
+        <p class="mb-1 text-xs font-semibold text-mute">${label}</p>
+        <div class="mb-2 flex flex-wrap gap-1.5">
+          ${items.map((it) => html`
+            <span key=${it} class="inline-flex items-center gap-1 rounded-full border border-line bg-tint py-1 pl-3 pr-1.5 text-sm">
+              ${it}
+              <button type="button" onClick=${() => onChange(items.filter((x) => x !== it))} aria-label=${'Hapus ' + it} class="rounded-full p-0.5 text-mute hover:text-bad"><${Icon} name="x" size=${14} /></button>
+            </span>`)}
+          ${items.length === 0 && html`<span class="text-sm text-mute">Belum ada pilihan.</span>`}
+        </div>
+        <div class="flex gap-2">
+          <input class=${inp} placeholder=${placeholder} value=${text} onChange=${(e) => setText(e.target.value)} onKeyDown=${(e) => { if (e.key === 'Enter') { e.preventDefault(); add(); } }} />
+          <button type="button" class="${btnGhost} shrink-0" onClick=${add}><${Icon} name="plus" size=${16} /> Tambah</button>
+        </div>
+        ${hint && html`<p class="mt-1 text-xs text-mute">${hint}</p>`}
+      </div>`;
+  }
+
+  function Modal({ onClose, children, closeOnBackdrop = true, width = 'max-w-3xl' }) {
+    useEffect(() => {
+      const k = (e) => e.key === 'Escape' && onClose();
+      window.addEventListener('keydown', k);
+      const prev = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      return () => { window.removeEventListener('keydown', k); document.body.style.overflow = prev; };
+    }, [onClose]);
+    return html`
+      <div class="modal-shell fixed inset-0 z-50 overflow-y-auto bg-ink/50 sm:p-6"
+        onMouseDown=${closeOnBackdrop ? (e) => e.target === e.currentTarget && onClose() : null}>
+        <div class="mx-auto w-full ${width}" role="dialog" aria-modal="true">${children}</div>
+      </div>`;
+  }
+
+  /* ---------- Ringkasan finansial ---------- */
+  function Figure({ label, value, big, tone }) {
+    return html`
+      <div>
+        <p class="text-xs font-semibold text-mute">${label}</p>
+        <p class="tabular-nums font-bold ${big ? 'text-3xl md:text-4xl' : 'text-xl md:text-2xl'} ${tone || 'text-ink'}">${value}</p>
+      </div>`;
+  }
+
+  function Summary({ orders, label }) {
+    const s = useMemo(() => {
+      const rev = orders.reduce((a, o) => a + orderTotal(o), 0);
+      const exp = orders.reduce((a, o) => a + orderCost(o), 0);
+      const paid = orders.reduce((a, o) => a + paidAmount(o), 0);
+      return { rev, exp, profit: rev - exp, margin: rev ? ((rev - exp) / rev) * 100 : 0, paid, due: rev - paid, count: orders.length };
+    }, [orders]);
+    const expPct = s.rev ? Math.min(100, Math.max(0, (s.exp / s.rev) * 100)) : 0;
+    const profitPct = s.profit > 0 ? 100 - expPct : 0;
+    const neg = s.profit < 0;
+    return html`
+      <section class="rounded-2xl border border-line bg-surface p-5 md:p-7" aria-label="Ringkasan finansial">
+        <p class="mb-4 text-sm font-semibold text-mute">Ringkasan ${label}</p>
+        <div class="flex flex-col gap-5 md:flex-row md:items-end md:gap-8">
+          <${Figure} label="Total omzet" value=${rupiah(s.rev)} />
+          <span class="hidden pb-1 text-2xl text-mute md:block" aria-hidden="true">−</span>
+          <${Figure} label="Total pengeluaran (HPP)" value=${rupiah(s.exp)} />
+          <span class="hidden pb-1 text-2xl text-mute md:block" aria-hidden="true">=</span>
+          <div class="md:ml-auto md:text-right">
+            <${Figure} label="Laba bersih" value=${rupiah(s.profit)} big tone=${neg ? 'text-bad' : 'text-good'} />
+          </div>
+        </div>
+
+        <div class="mt-6">
+          <div class="flex h-3 overflow-hidden rounded-full bg-line" role="img" aria-label="Pengeluaran ${pct(expPct)} dari omzet, laba ${pct(profitPct)}">
+            <div class="h-full bg-mute/60 transition-all" style=${{ width: expPct + '%' }}></div>
+            <div class="h-full bg-good transition-all" style=${{ width: profitPct + '%' }}></div>
+          </div>
+          <div class="mt-2 flex flex-wrap items-baseline justify-between gap-2 text-sm">
+            <span class="text-mute">Pengeluaran menyerap ${pct(expPct)} dari omzet</span>
+            <span class="font-semibold ${neg ? 'text-bad' : 'text-ink'}">Margin keuntungan ${pct(s.margin)}</span>
+          </div>
+        </div>
+
+        <dl class="mt-6 grid grid-cols-3 gap-3 border-t border-line pt-4">
+          <div><dt class="text-xs text-mute">Sudah diterima</dt><dd class="tabular-nums text-sm font-semibold text-good md:text-base">${rupiah(s.paid)}</dd></div>
+          <div><dt class="text-xs text-mute">Sisa tagihan</dt><dd class="tabular-nums text-sm font-semibold ${s.due > 0 ? 'text-warn' : 'text-ink'} md:text-base">${rupiah(s.due)}</dd></div>
+          <div><dt class="text-xs text-mute">Jumlah pesanan</dt><dd class="tabular-nums text-sm font-semibold md:text-base">${s.count}</dd></div>
+        </dl>
+      </section>`;
+  }
+
+  /* ---------- Daftar pesanan ---------- */
+  function RowActions({ o, onInvoice, onEdit, onDelete }) {
+    const ib = 'rounded-lg p-2 text-mute hover:bg-tint hover:text-ink';
+    return html`
+      <div class="flex items-center justify-end gap-1">
+        <button class="${btn} !px-2.5 !py-1.5 border border-line bg-surface text-xs text-accent hover:bg-accent-soft" onClick=${() => onInvoice(o)}>
+          <${Icon} name="file" size=${15} /> Invoice
+        </button>
+        <button class=${ib} onClick=${() => onEdit(o)} aria-label="Ubah ${o.id}"><${Icon} name="pencil" size=${16} /></button>
+        <button class="${ib} hover:!text-bad" onClick=${() => onDelete(o)} aria-label="Hapus ${o.id}"><${Icon} name="trash" size=${16} /></button>
+      </div>`;
+  }
+
+  function ProgressSelect({ o, onChange }) {
+    const cur = progressOf(o);
+    const idx = progressIdx(o);
+    return html`
+      <div class="inline-block min-w-[9.5rem]">
+        <div class="relative">
+          <select value=${cur.key} onChange=${(e) => onChange(o.id, e.target.value)} aria-label=${'Status pekerjaan ' + o.id}
+            class=${'w-full cursor-pointer appearance-none rounded-full border-0 py-1 pl-3 pr-7 text-xs font-semibold ' + cur.cls}>
+            ${PROGRESS.map((x) => html`<option key=${x.key} value=${x.key}>${x.label}</option>`)}
+          </select>
+          <span class="pointer-events-none absolute right-2 top-1/2 -translate-y-1/2 opacity-70"><${Icon} name="chevron-down" size=${12} /></span>
+        </div>
+        <div class="mt-1.5 flex gap-0.5" aria-hidden="true">
+          ${[0, 1, 2, 3].map((i) => html`<span key=${i} class=${'h-1 flex-1 rounded-full ' + (i < idx ? (idx === 4 ? 'bg-good' : 'bg-accent') : 'bg-line')}></span>`)}
+        </div>
+      </div>`;
+  }
+
+  function AcaraCell({ o }) {
+    if (!o.tanggalAcara) return html`<span class="text-mute">-</span>`;
+    const t = hTag(o);
+    return html`
+      <div>
+        <p>${fmtShort(o.tanggalAcara)}</p>
+        ${t && html`<span class=${'mt-1 inline-block rounded-full px-1.5 py-0.5 text-[10px] font-bold ' + t.cls}>${t.label}</span>`}
+      </div>`;
+  }
+
+  function EventLine({ o }) {
+    if (!o.tanggalAcara) return null;
+    const t = hTag(o);
+    return html`
+      <p class="mt-0.5 flex items-center gap-1.5 text-xs text-mute">
+        Acara ${fmtShort(o.tanggalAcara)}
+        ${t && html`<span class=${'rounded-full px-1.5 py-0.5 text-[10px] font-bold ' + t.cls}>${t.label}</span>`}
+      </p>`;
+  }
+
+  function GroupHead({ g }) {
+    const all = g.all || g.rows;
+    const rev = all.reduce((a, o) => a + orderTotal(o), 0);
+    const profit = all.reduce((a, o) => a + orderProfit(o), 0);
+    return html`
+      <div class="flex flex-wrap items-baseline justify-between gap-x-5 gap-y-1">
+        <p class="font-serif text-lg font-semibold leading-tight">
+          ${monthTitle(g.key)} <span class="font-sans text-xs font-normal text-mute">${all.length} pesanan</span>
+        </p>
+        <p class="flex gap-4 text-xs text-mute tabular-nums">
+          <span>Omzet <b class="font-semibold text-ink">${rupiah(rev)}</b></span>
+          <span>Laba <b class="font-semibold ${profit < 0 ? 'text-bad' : 'text-good'}">${rupiah(profit)}</b></span>
+        </p>
+      </div>`;
+  }
+
+  function OrderList({ rows, allRows, onProgress, ...actions }) {
+    if (!rows.length) {
+      return html`
+        <div class="flex flex-col items-center gap-2 px-6 py-14 text-center">
+          <${Icon} name="inbox" size=${32} className="text-mute" />
+          <p class="font-semibold">Belum ada pesanan yang cocok</p>
+          <p class="max-w-sm text-sm text-mute">Klik “Pesanan baru” untuk mencatat order, atau ubah periode, kata kunci, dan filter status.</p>
+        </div>`;
+    }
+    const groups = groupByMonth(rows).map((g) => ({ ...g, all: (allRows || rows).filter((o) => o.tanggal.slice(0, 7) === g.key) }));
+    return html`
+      <div>
+        <div class="scroll-white hidden overflow-x-auto md:block">
+          <table class="w-full min-w-[1180px] text-left text-sm">
+            <thead class="border-b border-line text-xs text-mute">
+              <tr>
+                <th rowSpan="2" class="px-3 py-2.5 align-bottom font-semibold">Klien dan invoice</th>
+                <th rowSpan="2" class="px-3 py-2.5 align-bottom font-semibold">Produk</th>
+                <th colSpan="3" class="border-b border-line px-3 pb-1.5 pt-2.5 text-center font-semibold">Tanggal</th>
+                <th rowSpan="2" class="px-3 py-2.5 text-right align-bottom font-semibold">Nilai order</th>
+                <th rowSpan="2" class="px-3 py-2.5 text-right align-bottom font-semibold">Laba</th>
+                <th rowSpan="2" class="px-3 py-2.5 align-bottom font-semibold">Pembayaran</th>
+                <th rowSpan="2" class="px-3 py-2.5 align-bottom font-semibold">Pekerjaan</th>
+                <th rowSpan="2" class="px-3 py-2.5"><span class="sr-only">Aksi</span></th>
+              </tr>
+              <tr>
+                <th class="px-3 py-1.5 font-semibold">Pesan</th>
+                <th class="px-3 py-1.5 font-semibold">Deadline</th>
+                <th class="px-3 py-1.5 font-semibold">Acara</th>
+              </tr>
+            </thead>
+            ${groups.map((g) => html`
+              <tbody key=${g.key} class="divide-y divide-line border-t border-line first:border-t-0">
+                <tr><td colSpan="10" class="bg-tint px-3 py-2.5"><${GroupHead} g=${g} /></td></tr>
+                ${g.rows.map((o) => {
+                  const total = orderTotal(o), profit = orderProfit(o);
+                  return html`
+                    <tr key=${o.id} class="align-top hover:bg-tint/60">
+                      <td class="px-3 py-3"><p class="font-semibold">${o.nama}</p><p class="text-xs text-mute">${o.id}</p></td>
+                      <td class="px-3 py-3"><p>${orderSummary(o)}</p><p class="text-xs text-mute tabular-nums">${orderQty(o).toLocaleString('id-ID')} pcs, ${(o.items || []).length} jenis</p></td>
+                      <td class="whitespace-nowrap px-3 py-3 tabular-nums">${fmtShort(o.tanggal)}</td>
+                      <td class="whitespace-nowrap px-3 py-3 tabular-nums">${fmtShort(o.deadline)}</td>
+                      <td class="whitespace-nowrap px-3 py-3 tabular-nums"><${AcaraCell} o=${o} /></td>
+                      <td class="whitespace-nowrap px-3 py-3 text-right tabular-nums"><p class="font-semibold">${rupiah(total)}</p><p class="text-xs text-mute">HPP ${rupiah(orderCost(o))}</p></td>
+                      <td class="whitespace-nowrap px-3 py-3 text-right tabular-nums"><p class="font-semibold ${profit < 0 ? 'text-bad' : ''}">${rupiah(profit)}</p><p class="text-xs text-mute">${pct(total ? (profit / total) * 100 : 0)}</p></td>
+                      <td class="px-3 py-3"><${Badge} status=${o.status} />${o.status === 'dp' && html`<p class="mt-1 whitespace-nowrap text-xs text-mute tabular-nums">${rupiah(o.dp)}</p>`}</td>
+                      <td class="px-3 py-3"><${ProgressSelect} o=${o} onChange=${onProgress} /></td>
+                      <td class="px-3 py-3"><${RowActions} o=${o} ...${actions} /></td>
+                    </tr>`;
+                })}
+              </tbody>`)}
+          </table>
+        </div>
+
+        <div class="md:hidden">
+          ${groups.map((g) => html`
+            <div key=${g.key} class="border-t border-line first:border-t-0">
+              <div class="bg-tint px-4 py-2.5"><${GroupHead} g=${g} /></div>
+              <ul class="divide-y divide-line">
+                ${g.rows.map((o) => {
+                  const total = orderTotal(o), profit = orderProfit(o);
+                  return html`
+                    <li key=${o.id} class="space-y-3 p-4">
+                      <div class="flex items-start justify-between gap-3">
+                        <div><p class="font-semibold">${o.nama}</p><p class="text-xs text-mute">${o.id}</p></div>
+                        <${Badge} status=${o.status} />
+                      </div>
+                      <p class="text-sm">${orderSummary(o)} <span class="text-mute tabular-nums">· ${orderQty(o).toLocaleString('id-ID')} pcs</span></p>
+                      <dl class="grid grid-cols-3 gap-2 text-xs">
+                        <div><dt class="text-mute">Nilai order</dt><dd class="tabular-nums font-semibold">${rupiah(total)}</dd></div>
+                        <div><dt class="text-mute">HPP</dt><dd class="tabular-nums">${rupiah(orderCost(o))}</dd><dd class="tabular-nums text-mute">${rupiah(costPerPcs(o))} / pcs</dd></div>
+                        <div><dt class="text-mute">Laba</dt><dd class="tabular-nums font-semibold ${profit < 0 ? 'text-bad' : ''}">${rupiah(profit)}</dd></div>
+                      </dl>
+                      <dl class="grid grid-cols-3 gap-2 text-xs">
+                        <div><dt class="text-mute">Pesan</dt><dd class="tabular-nums">${fmtShort(o.tanggal)}</dd></div>
+                        <div><dt class="text-mute">Deadline</dt><dd class="tabular-nums">${fmtShort(o.deadline)}</dd></div>
+                        <div><dt class="text-mute">Acara</dt><dd class="tabular-nums"><${AcaraCell} o=${o} /></dd></div>
+                      </dl>
+                      <${ProgressSelect} o=${o} onChange=${onProgress} />
+                      <${RowActions} o=${o} ...${actions} />
+                    </li>`;
+                })}
+              </ul>
+            </div>`)}
+        </div>
+      </div>`;
+  }
+
+  /* ---------- Pagination ---------- */
+  function Pagination({ page, pageCount, total, size, onPage }) {
+    if (!total) return null;
+    const from = (page - 1) * size + 1;
+    const to = Math.min(total, page * size);
+    const nums = [];
+    for (let i = 1; i <= pageCount; i++) {
+      if (i === 1 || i === pageCount || Math.abs(i - page) <= 1) nums.push(i);
+      else if (nums[nums.length - 1] !== '…') nums.push('…');
+    }
+    const pb = 'inline-flex h-9 min-w-9 items-center justify-center rounded-lg border px-2 text-sm font-semibold transition-colors';
+    const idle = 'border-line bg-surface text-ink hover:bg-tint disabled:opacity-40 disabled:hover:bg-surface';
+    return html`
+      <nav class="flex flex-col items-center justify-between gap-3 border-t border-line px-4 py-3 sm:flex-row" aria-label="Halaman daftar pesanan">
+        <p class="text-xs tabular-nums text-mute">Menampilkan ${from}–${to} dari ${total} pesanan</p>
+        ${pageCount > 1 && html`
+          <div class="flex items-center gap-1">
+            <button class="${pb} ${idle}" disabled=${page === 1} onClick=${() => onPage(page - 1)} aria-label="Halaman sebelumnya"><${Icon} name="chevron-left" size=${16} /></button>
+            ${nums.map((n, i) => n === '…'
+              ? html`<span key=${'e' + i} class="px-1 text-mute" aria-hidden="true">…</span>`
+              : html`<button key=${n} class="${pb} ${n === page ? 'border-accent bg-accent text-on-accent' : idle}" aria-current=${n === page ? 'page' : null} onClick=${() => onPage(n)}>${n}</button>`)}
+            <button class="${pb} ${idle}" disabled=${page === pageCount} onClick=${() => onPage(page + 1)} aria-label="Halaman berikutnya"><${Icon} name="chevron-right" size=${16} /></button>
+          </div>`}
+      </nav>`;
+  }
+
+  /* ---------- Agenda acara (pengingat hari H) ---------- */
+  function EventCard({ o, onInvoice }) {
+    const d = daysUntil(o.tanggalAcara);
+    const today = d === 0;
+    const dt = new Date(o.tanggalAcara + 'T00:00:00');
+    const sisa = orderTotal(o) - paidAmount(o);
+    const idx = progressIdx(o);
+    const prog = progressOf(o);
+    const wa = String(o.wa || '').replace(/\D/g, '').replace(/^0/, '62');
+    const countdown = today ? 'Hari H' : d === 1 ? 'Besok' : 'H-' + d;
+    const chip = today ? 'bg-white text-accent' : d === 1 ? 'bg-warn-soft text-warn' : 'bg-accent-soft text-accent';
+    const sub = today ? 'text-on-accent/80' : 'text-mute';
+    const act = today ? `${btn} bg-white text-accent hover:opacity-90` : btnGhost;
+    return html`
+      <article class=${'flex w-[17.5rem] shrink-0 snap-start flex-col rounded-2xl border p-4 sm:w-auto ' + (today ? 'border-accent bg-accent text-on-accent' : 'border-line bg-surface')}>
+        <div class="flex items-start gap-3">
+          <div class=${'w-14 shrink-0 overflow-hidden rounded-xl text-center ' + (today ? 'bg-white text-accent' : 'border border-line bg-surface text-ink')}>
+            <p class=${'py-0.5 text-[11px] font-semibold ' + (today ? 'bg-accent-soft text-accent' : 'bg-accent text-on-accent')}>${MONTHS_SHORT[dt.getMonth()]}</p>
+            <p class="py-1.5 font-serif text-2xl font-bold leading-none">${dt.getDate()}</p>
+          </div>
+          <div class="min-w-0 flex-1">
+            <p class="truncate font-serif text-xl font-semibold leading-tight">${o.nama}</p>
+            <p class=${'mt-0.5 text-xs ' + sub}>${dt.toLocaleDateString('id-ID', { weekday: 'long' })}, ${fmtShort(o.tanggalAcara)}</p>
+          </div>
+          <span class=${'shrink-0 rounded-full px-2.5 py-0.5 text-xs font-bold ' + chip}>${countdown}</span>
+        </div>
+
+        <p class=${'mt-3 text-sm ' + (today ? '' : 'text-ink')}>${orderSummary(o)} <span class=${sub}>(${orderQty(o).toLocaleString('id-ID')} pcs)</span></p>
+
+        <div class="mt-3 flex flex-wrap items-center gap-1.5">
+          <${Badge} status=${o.status} />
+          <span class=${'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ' + prog.cls}>${prog.label}</span>
+        </div>
+        <div class="mt-2.5 flex gap-0.5" aria-hidden="true">
+          ${[0, 1, 2, 3].map((i) => html`<span key=${i} class=${'h-1 flex-1 rounded-full ' + (i < idx ? (today ? 'bg-white' : idx === 4 ? 'bg-good' : 'bg-accent') : (today ? 'bg-white/30' : 'bg-line'))}></span>`)}
+        </div>
+        ${sisa > 0 && html`<p class=${'mt-3 text-sm ' + sub}>Sisa tagihan <span class=${'font-bold tabular-nums ' + (today ? 'text-on-accent' : 'text-warn')}>${rupiah(sisa)}</span></p>`}
+
+        <div class="mt-auto flex gap-2 pt-4">
+          <button class=${act} onClick=${() => onInvoice(o)}><${Icon} name="printer" size=${15} /> Invoice</button>
+          ${wa && html`<a class=${act} href=${'https://wa.me/' + wa} target="_blank" rel="noopener noreferrer"><${Icon} name="message" size=${15} /> WhatsApp</a>`}
+        </div>
+      </article>`;
+  }
+
+  function ReminderBar({ orders, onInvoice, onDismiss }) {
+    const withEvent = orders.filter((o) => o.tanggalAcara);
+    const hari = withEvent.filter((o) => daysUntil(o.tanggalAcara) === 0);
+    const soon = withEvent.filter((o) => { const d = daysUntil(o.tanggalAcara); return d > 0 && d <= 7; }).sort((a, b) => a.tanggalAcara.localeCompare(b.tanggalAcara));
+    if (!hari.length && !soon.length) return null;
+    const parts = [];
+    if (hari.length) parts.push(`${hari.length} acara hari ini`);
+    if (soon.length) parts.push(`${soon.length} dalam 7 hari ke depan`);
+    return html`
+      <section role="status" aria-label="Agenda acara" class="rounded-2xl border border-line bg-surface p-4 md:p-5">
+        <div class="flex items-start justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <span class="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-accent-soft text-accent"><${Icon} name="bell" size=${20} /></span>
+            <div>
+              <h2 class="font-serif text-xl font-semibold leading-tight">${hari.length ? 'Hari H hari ini' : 'Acara minggu ini'}</h2>
+              <p class="text-xs text-mute">${parts.join(', ')}</p>
+            </div>
+          </div>
+          <button class="rounded-lg p-1.5 text-mute hover:text-ink" onClick=${onDismiss} aria-label="Tutup agenda acara"><${Icon} name="x" size=${16} /></button>
+        </div>
+        <div class="-mx-1 mt-4 flex snap-x gap-3 overflow-x-auto px-1 pb-1 sm:mx-0 sm:grid sm:grid-cols-2 sm:overflow-visible sm:px-0 sm:pb-0 lg:grid-cols-3">
+          ${[...hari, ...soon].map((o) => html`<${EventCard} key=${o.id} o=${o} onInvoice=${onInvoice} />`)}
+        </div>
+      </section>`;
+  }
+
+  /* ---------- Pemilih periode (tahun dan bulan) ---------- */
+  function PeriodBar({ years, months, year, month, total, onYear, onMonth }) {
+    const pill = (active) => `whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${active ? 'border-accent bg-accent text-on-accent' : 'border-line bg-surface text-mute hover:text-ink'}`;
+    const cnt = (n) => html`<span class="tabular-nums opacity-80">${n}</span>`;
+    return html`
+      <section class="space-y-3 rounded-2xl border border-line bg-surface p-4" aria-label="Pilih periode">
+        <div class="flex items-center gap-3">
+          <span class="w-12 shrink-0 text-xs font-semibold text-mute">Tahun</span>
+          <div class="flex gap-2 overflow-x-auto py-0.5">
+            <button class=${pill(year === 'semua')} onClick=${() => onYear('semua')}>Semua ${cnt(total)}</button>
+            ${years.map((y) => html`<button key=${y.key} class=${pill(year === y.key)} onClick=${() => onYear(y.key)}>${y.key} ${cnt(y.count)}</button>`)}
+          </div>
+        </div>
+        ${year !== 'semua' && html`
+          <div class="flex items-center gap-3">
+            <span class="w-12 shrink-0 text-xs font-semibold text-mute">Bulan</span>
+            <div class="flex gap-2 overflow-x-auto py-0.5">
+              <button class=${pill(month === 'semua')} onClick=${() => onMonth('semua')}>Semua bulan</button>
+              ${months.map((m) => html`<button key=${m.key} class=${pill(month === m.key)} onClick=${() => onMonth(m.key)}>${MONTHS_SHORT[Number(m.key) - 1]} ${cnt(m.count)}</button>`)}
+            </div>
+          </div>`}
+      </section>`;
+  }
+
+  /* ---------- Form pesanan ---------- */
+  let uidSeq = 0;
+  const uid = () => 'r' + Date.now().toString(36) + (uidSeq++);
+  const blankItem = () => ({ uid: uid(), jenis: '', produk: '', qty: '', price: '', total: '', ket: '', src: 'price' });
+  const blankExpense = (kategori) => ({ uid: uid(), kategori, nama: '', qty: '', satuan: '', price: '', total: '', src: 'price' });
+  const blankOrder = (orders) => {
+    const tanggal = todayISO();
+    return { id: nextInvoiceId(orders, tanggal), kode: uniqueKode(orders), tanggal, deadline: addDays(tanggal, 14), tanggalAcara: '', nama: '', wa: '', alamat: '', status: 'belum', progress: 'belum', dp: '',
+      items: [blankItem()], expenses: KATEGORI.map((k) => blankExpense(k.key)) };
+  };
+  const totalStr = (l) => { const t = lineTotal(l); return t ? String(Math.round(t)) : ''; };
+  const toForm = (o) => ({
+    ...o, tanggalAcara: o.tanggalAcara || '', dp: o.dp ? String(o.dp) : '',
+    items: (o.items || []).map((l) => ({ uid: uid(), jenis: l.jenis || '', produk: l.produk || '', qty: String(l.qty ?? ''), price: String(l.price ?? ''), total: totalStr(l), ket: l.ket || '', src: 'price' })),
+    expenses: (o.expenses || []).map((e) => ({ uid: uid(), kategori: e.kategori, nama: e.nama || '', qty: String(e.qty ?? ''), satuan: e.satuan || '', price: String(e.price ?? ''), total: totalStr(e), src: 'price' })),
+  });
+  const filledItem = (l) => l.jenis.trim() || l.produk.trim() || l.qty || l.price || l.total;
+  const filledExpense = (x) => x.nama.trim() || x.qty || x.price || x.total;
+  const rowTotal = (r) => (r.total !== '' ? num(r.total) : Math.round(num(r.qty) * num(r.price)));
+  const fromForm = (f) => ({
+    ...f, id: f.id.trim(), nama: f.nama.trim(), dp: f.status === 'dp' ? num(f.dp) : 0,
+    items: f.items.filter(filledItem).map((l) => ({ jenis: l.jenis.trim(), produk: l.produk.trim(), qty: num(l.qty), price: num(l.price), total: rowTotal(l), ket: (l.ket || '').trim() })),
+    expenses: f.expenses.filter(filledExpense).map((x) => ({ kategori: x.kategori, nama: x.nama.trim(), qty: num(x.qty), satuan: x.satuan.trim(), price: num(x.price), total: rowTotal(x) })),
+  });
+
+  // Hitung ulang satu baris: isi harga satuan -> total = jumlah x harga; isi total -> harga satuan = total / jumlah
+  const recalc = (row, k, v) => {
+    const r = { ...row, [k]: v };
+    const q = num(r.qty);
+    if (k === 'price') {
+      r.src = 'price';
+      r.total = v !== '' && q > 0 ? String(Math.round(q * num(v))) : '';
+    } else if (k === 'total') {
+      if (v === '') { r.src = 'price'; r.price = ''; }
+      else { r.src = 'total'; if (q > 0) r.price = String(Math.round(num(v) / q)); }
+    } else if (k === 'qty') {
+      if (r.src === 'total') { if (r.total !== '' && q > 0) r.price = String(Math.round(num(r.total) / q)); }
+      else r.total = r.price !== '' && q > 0 ? String(Math.round(q * num(r.price))) : '';
+    }
+    return r;
+  };
+
+  const Cell = ({ label, className = '', children }) => html`
+    <div class="block ${className}">
+      <span class="mb-1 block text-xs font-semibold text-mute md:hidden">${label}</span>
+      ${children}
+    </div>`;
+  const RemoveBtn = ({ onClick, label }) => html`
+    <button type="button" onClick=${onClick} aria-label=${label}
+      class="col-span-2 inline-flex h-[38px] items-center justify-center gap-1.5 justify-self-end rounded-lg px-2.5 text-xs font-semibold text-mute hover:bg-tint hover:text-bad md:col-span-1 md:w-[38px] md:px-0">
+      <${Icon} name="trash" size=${16} /><span class="md:hidden">Hapus baris</span>
+    </button>`;
+  const AutoNote = ({ r }) => (r.src === 'total' && r.price !== '' ? html`<span class="mt-1 block text-[11px] text-mute">dihitung dari total</span>` : null);
+  const ITEM_COLS = 'md:grid-cols-[1.1fr_1.4fr_0.7fr_1.1fr_1.1fr_1.5fr_38px]';
+  const EXP_COLS = 'md:grid-cols-[2fr_0.8fr_1fr_1.3fr_1.3fr_38px]';
+  const colHead = ({ cols, labels }) => html`
+    <div class="hidden gap-3 px-0 pb-1 text-xs font-semibold text-mute md:grid ${cols}">
+      ${labels.map((t, i) => html`<span key=${i}>${t}</span>`)}<span></span>
+    </div>`;
+
+  function OrderForm({ orders, editing, settings, onSave, onClose }) {
+    const [f, setF] = useState(() => (editing ? toForm(editing) : blankOrder(orders)));
+    const [idManual, setIdManual] = useState(!!editing);
+    const [errors, setErrors] = useState({});
+    const set = (k, v) => setF((p) => ({ ...p, [k]: v }));
+    const patch = (list, id, k, v) => setF((p) => ({ ...p, [list]: p[list].map((r) => (r.uid === id ? recalc(r, k, v) : r)) }));
+    const addRow = (list, row) => setF((p) => ({ ...p, [list]: [...p[list], row] }));
+    const delRow = (list, id) => setF((p) => ({ ...p, [list]: p[list].filter((r) => r.uid !== id) }));
+    const onTanggal = (v) => setF((p) => ({ ...p, tanggal: v, id: !idManual && v ? nextInvoiceId(orders, v) : p.id }));
+
+    const total = sumLines(f.items);
+    const cost = sumLines(f.expenses);
+    const qtyAll = f.items.reduce((a, l) => a + num(l.qty), 0);
+    const profit = total - cost;
+    const margin = total ? (profit / total) * 100 : 0;
+    const perPcs = qtyAll ? cost / qtyAll : 0;
+
+    const submit = () => {
+      const e = {};
+      if (!f.id.trim()) e.id = 'Nomor invoice wajib diisi.';
+      else if (orders.some((o) => o.id === f.id.trim() && (!editing || o.id !== editing.id))) e.id = 'Nomor invoice ini sudah dipakai.';
+      if (!f.nama.trim()) e.nama = 'Nama klien wajib diisi.';
+      if (f.deadline && f.tanggal && f.deadline < f.tanggal) e.deadline = 'Deadline lebih awal dari tanggal order.';
+      const items = f.items.filter(filledItem);
+      if (!items.length) e.items = 'Tambahkan minimal satu jenis pesanan.';
+      else if (items.some((l) => !l.jenis.trim() || !l.produk.trim())) e.items = 'Setiap baris pesanan perlu nama jenis dan nama produk.';
+      else if (items.some((l) => !(num(l.qty) > 0))) e.items = 'Jumlah tiap jenis pesanan minimal 1 pcs.';
+      const exps = f.expenses.filter(filledExpense);
+      if (exps.some((x) => !x.nama.trim())) e.expenses = 'Isi nama pengeluaran pada setiap baris yang sudah memiliki angka.';
+      else if (exps.some((x) => !(num(x.qty) > 0))) e.expenses = 'Jumlah tiap pengeluaran minimal 1.';
+      if (f.status === 'dp' && !(num(f.dp) > 0)) e.dp = 'Isi nominal DP yang sudah diterima.';
+      else if (f.status === 'dp' && num(f.dp) > total) e.dp = 'DP tidak boleh melebihi nilai order.';
+      setErrors(e);
+      if (Object.keys(e).length) return;
+      onSave(fromForm(f), editing);
+    };
+
+    const sectionTitle = 'mb-3 text-sm font-bold';
+    const saran = (key) => (key === 'hpp' ? settings.saranHpp : settings.saranProduksi) || [];
+    return html`
+      <${Modal} onClose=${onClose} closeOnBackdrop=${false} width="max-w-4xl">
+        <div class="flex min-h-full flex-col bg-surface sm:min-h-0 sm:rounded-2xl sm:border sm:border-line">
+          <div class="flex items-center justify-between border-b border-line px-5 py-4">
+            <h2 class="text-lg font-bold">${editing ? 'Ubah pesanan' : 'Pesanan baru'}</h2>
+            <button class="rounded-lg p-2 text-mute hover:bg-tint" onClick=${onClose} aria-label="Tutup"><${Icon} name="x" /></button>
+          </div>
+
+          <div class="flex-1 space-y-8 px-5 py-5">
+            <section>
+              <h3 class=${sectionTitle}>Data pesanan</h3>
+              <div class="grid gap-4 sm:grid-cols-2">
+                <${Field} label="No. invoice" error=${errors.id} hint="Dibuat otomatis, boleh diubah manual.">
+                  <input class=${inp} value=${f.id} onChange=${(e) => { setIdManual(true); set('id', e.target.value); }} />
+                <//>
+                <div class="grid grid-cols-2 gap-3">
+                  <${Field} label="Tanggal order"><input type="date" class=${inp} value=${f.tanggal} onChange=${(e) => onTanggal(e.target.value)} /><//>
+                  <${Field} label="Deadline pengerjaan" error=${errors.deadline}><input type="date" class=${inp} value=${f.deadline} onChange=${(e) => set('deadline', e.target.value)} /><//>
+                </div>
+                <${Field} label="Nama klien" error=${errors.nama}><input class=${inp} placeholder="Nama calon pengantin atau PIC" value=${f.nama} onChange=${(e) => set('nama', e.target.value)} /><//>
+                <${Field} label="No. WhatsApp / kontak"><input class=${inp} inputMode="tel" placeholder="0812-xxxx-xxxx" value=${f.wa} onChange=${(e) => set('wa', e.target.value)} /><//>
+                <${Field} label="Tanggal acara (internal)" hint="Untuk pengingat hari H di dashboard. Tidak tampil di invoice.">
+                  <input type="date" class=${inp} value=${f.tanggalAcara} onChange=${(e) => set('tanggalAcara', e.target.value)} />
+                <//>
+                <${Field} label="Status pekerjaan">
+                  <select class=${inp} value=${f.progress || 'belum'} onChange=${(e) => set('progress', e.target.value)}>
+                    ${PROGRESS.map((x) => html`<option key=${x.key} value=${x.key}>${x.label}</option>`)}
+                  </select>
+                <//>
+                <${Field} label="Alamat pengiriman" className="sm:col-span-2"><textarea rows="2" class=${inp} value=${f.alamat} onChange=${(e) => set('alamat', e.target.value)}></textarea><//>
+              </div>
+            </section>
+
+            <section>
+              <h3 class="mb-1 text-sm font-bold">Jenis dan produk yang dipesan</h3>
+              <p class="mb-3 text-xs text-mute">Satu klien bisa memesan beberapa jenis. Ketik nama jenis dan nama produk secara terpisah. Isi harga satuan, atau isi total saja dan harga satuan dihitung otomatis.</p>
+              <div class="space-y-3">
+                <${colHead} cols=${ITEM_COLS} labels=${['Jenis', 'Nama produk', 'Jumlah (pcs)', 'Harga satuan', 'Total', 'Keterangan']} />
+                ${f.items.map((l, i) => html`
+                  <div key=${l.uid} class="grid grid-cols-2 gap-3 rounded-xl border border-line p-3 md:items-start md:rounded-none md:border-0 md:p-0 ${ITEM_COLS}">
+                    <${Cell} label="Jenis" className="col-span-2 md:col-span-1"><input class=${inp} aria-label="Jenis" autoComplete="off" placeholder="Ketik jenis, mis. Softcover" value=${l.jenis} onChange=${(e) => patch('items', l.uid, 'jenis', e.target.value)} /><//>
+                    <${Cell} label="Nama produk" className="col-span-2 md:col-span-1"><input class=${inp} aria-label="Nama produk" placeholder="Nama atau tema desain" value=${l.produk} onChange=${(e) => patch('items', l.uid, 'produk', e.target.value)} /><//>
+                    <${Cell} label="Jumlah (pcs)"><${NumInput} label="Jumlah" value=${l.qty} onChange=${(v) => patch('items', l.uid, 'qty', v)} /><//>
+                    <${Cell} label="Harga satuan"><${MoneyInput} label="Harga satuan" value=${l.price} onChange=${(v) => patch('items', l.uid, 'price', v)} /><${AutoNote} r=${l} /><//>
+                    <${Cell} label="Total" className="col-span-2 md:col-span-1"><${MoneyInput} label="Total" value=${l.total} onChange=${(v) => patch('items', l.uid, 'total', v)} /><//>
+                    <${Cell} label="Keterangan (opsional)" className="col-span-2 md:col-span-1"><input class=${inp} aria-label="Keterangan" autoComplete="off" placeholder="Opsional" value=${l.ket} onChange=${(e) => patch('items', l.uid, 'ket', e.target.value)} /><//>
+                    <${RemoveBtn} onClick=${() => delRow('items', l.uid)} label=${'Hapus jenis pesanan ' + (i + 1)} />
+                  </div>`)}
+              </div>
+              ${errors.items && html`<p class="mt-2 text-xs font-medium text-bad">${errors.items}</p>`}
+              <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
+                <button type="button" class=${btnGhost} onClick=${() => addRow('items', blankItem())}><${Icon} name="plus" size=${16} /> Tambah jenis</button>
+                <p class="text-sm text-mute tabular-nums">${qtyAll.toLocaleString('id-ID')} pcs, total nilai order <span class="font-bold text-ink">${rupiah(total)}</span></p>
+              </div>
+
+              <div class="mt-6">
+                <p class="mb-1 text-xs font-semibold text-mute">Status pembayaran</p>
+                <div class="inline-flex rounded-lg border border-line bg-tint p-1" role="radiogroup" aria-label="Status pembayaran">
+                  ${Object.entries(STATUS).map(([k, v]) => html`
+                    <button type="button" key=${k} role="radio" aria-checked=${f.status === k}
+                      class="rounded-md px-3.5 py-1.5 text-sm font-semibold transition-colors ${f.status === k ? 'bg-accent text-on-accent' : 'text-mute hover:text-ink'}"
+                      onClick=${() => set('status', k)}>${v.label}</button>`)}
+                </div>
+                ${f.status === 'dp' && html`
+                  <div class="mt-3 grid max-w-md grid-cols-[1fr_auto] items-end gap-2">
+                    <${Field} label="Nominal DP diterima" error=${errors.dp}><${MoneyInput} label="Nominal DP" value=${f.dp} onChange=${(v) => set('dp', v)} /><//>
+                    <button type="button" class="${btnGhost} h-[38px]" onClick=${() => set('dp', String(Math.round(total / 2)))}>50%</button>
+                  </div>`}
+              </div>
+            </section>
+
+            <section>
+              <h3 class="mb-1 text-sm font-bold">Pengeluaran HPP dan produksi</h3>
+              <p class="mb-3 text-xs text-mute">Tambahkan sebanyak apa pun jenis pengeluaran. Nama boleh diketik bebas atau dipilih dari daftar (daftar bisa diatur di Pengaturan). Isi harga satuan, atau isi total saja dan harga satuan dihitung otomatis.</p>
+              <div class="space-y-5">
+                ${KATEGORI.map((k) => {
+                  const rows = f.expenses.filter((x) => x.kategori === k.key);
+                  return html`
+                    <div key=${k.key} class="rounded-xl border border-line p-4">
+                      <div class="mb-3 flex flex-wrap items-baseline justify-between gap-x-3">
+                        <p class="text-sm font-semibold">${k.title} <span class="text-xs font-normal text-mute">${k.hint}</span></p>
+                        <p class="tabular-nums text-sm font-semibold">${rupiah(sumLines(rows))}</p>
+                      </div>
+                      ${rows.length === 0 && html`<p class="mb-3 text-sm text-mute">Belum ada baris. Klik tombol di bawah untuk menambah pengeluaran ${k.title}.</p>`}
+                      <div class="space-y-3">
+                        <${colHead} cols=${EXP_COLS} labels=${['Nama pengeluaran', 'Jumlah', 'Satuan', 'Harga satuan', 'Total']} />
+                        ${rows.map((x) => html`
+                          <div key=${x.uid} class="grid grid-cols-2 gap-3 rounded-lg border border-line p-3 md:items-start md:rounded-none md:border-0 md:p-0 ${EXP_COLS}">
+                            <${Cell} label="Nama pengeluaran" className="col-span-2 md:col-span-1"><${Combo} label="Nama pengeluaran" options=${saran(k.key)} placeholder="Pilih atau ketik jenis" value=${x.nama} onChange=${(v) => patch('expenses', x.uid, 'nama', v)} /><//>
+                            <${Cell} label="Jumlah"><input type="number" min="0" step="any" inputMode="decimal" aria-label="Jumlah" class="${inp} tabular-nums" value=${x.qty} onChange=${(e) => patch('expenses', x.uid, 'qty', e.target.value)} /><//>
+                            <${Cell} label="Satuan"><${Combo} label="Satuan" options=${settings.satuan || []} placeholder="Pilih satuan" value=${x.satuan} onChange=${(v) => patch('expenses', x.uid, 'satuan', v)} /><//>
+                            <${Cell} label="Harga satuan"><${MoneyInput} label="Harga satuan" value=${x.price} onChange=${(v) => patch('expenses', x.uid, 'price', v)} /><${AutoNote} r=${x} /><//>
+                            <${Cell} label="Total"><${MoneyInput} label="Total" value=${x.total} onChange=${(v) => patch('expenses', x.uid, 'total', v)} /><//>
+                            <${RemoveBtn} onClick=${() => delRow('expenses', x.uid)} label=${'Hapus pengeluaran ' + (x.nama || 'tanpa nama')} />
+                          </div>`)}
+                      </div>
+                      <button type="button" class="${btnGhost} mt-3" onClick=${() => addRow('expenses', blankExpense(k.key))}><${Icon} name="plus" size=${16} /> Tambah pengeluaran ${k.title}</button>
+                    </div>`;
+                })}
+              </div>
+              ${errors.expenses && html`<p class="mt-2 text-xs font-medium text-bad">${errors.expenses}</p>`}
+              <p class="mt-3 text-right text-sm text-mute">Total pengeluaran <span class="tabular-nums text-base font-bold text-ink">${rupiah(cost)}</span></p>
+            </section>
+          </div>
+
+          <div class="sticky bottom-0 border-t border-line bg-surface px-5 py-4 sm:rounded-b-2xl">
+            <div class="mb-3 grid grid-cols-2 gap-3 text-sm sm:grid-cols-5">
+              <div><p class="text-xs text-mute">Nilai order</p><p class="tabular-nums font-semibold">${rupiah(total)}</p></div>
+              <div><p class="text-xs text-mute">Total pengeluaran</p><p class="tabular-nums font-semibold">${rupiah(cost)}</p></div>
+              <div><p class="text-xs text-mute">HPP per undangan</p><p class="tabular-nums font-semibold">${rupiah(perPcs)}</p></div>
+              <div><p class="text-xs text-mute">Laba</p><p class="tabular-nums font-semibold ${profit < 0 ? 'text-bad' : 'text-good'}">${rupiah(profit)}</p></div>
+              <div><p class="text-xs text-mute">Margin</p><p class="tabular-nums font-semibold ${profit < 0 ? 'text-bad' : ''}">${pct(margin)}</p></div>
+            </div>
+            ${Object.keys(errors).length > 0 && html`<p class="mb-3 text-sm font-medium text-bad">Ada isian yang perlu diperbaiki, lihat pesan merah di atas.</p>`}
+            <div class="flex justify-end gap-2">
+              <button class=${btnGhost} onClick=${onClose}>Batal</button>
+              <button class=${btnPrimary} onClick=${submit}><${Icon} name="check" size=${16} /> Simpan pesanan</button>
+            </div>
+          </div>
+        </div>
+      <//>`;
+  }
+
+  /* ---------- Laporan keuangan bulanan ---------- */
+  const shiftYm = (ym, n) => {
+    const [y, m] = ym.split('-').map(Number);
+    const d = new Date(y, m - 1 + n, 1);
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0');
+  };
+  const ymTitle = (ym) => `${MONTHS[Number(ym.slice(5, 7)) - 1]} ${ym.slice(0, 4)}`;
+  const norm = (t) => String(t || '').trim().toLowerCase();
+  const compact = (n) => {
+    const a = Math.abs(n);
+    const f = (v, u) => (Math.round(v * 10) / 10).toLocaleString('id-ID') + ' ' + u;
+    if (a >= 1e9) return f(n / 1e9, 'M');
+    if (a >= 1e6) return f(n / 1e6, 'jt');
+    if (a >= 1e3) return f(n / 1e3, 'rb');
+    return String(Math.round(n));
+  };
+  const chg = (cur, prev) => {
+    if (!prev) return cur ? 'baru' : '-';
+    const d = ((cur - prev) / Math.abs(prev)) * 100;
+    return (d > 0 ? '+' : d < 0 ? '−' : '') + pct(Math.abs(d));
+  };
+  const chgCls = (cur, prev, goodUp) => (!goodUp || !prev || cur === prev ? 'text-mute' : cur > prev ? 'text-good' : 'text-bad');
+
+  const monthStats = (orders, ym) => {
+    const list = orders.filter((o) => o.tanggal.slice(0, 7) === ym).sort((a, b) => (a.tanggal + a.id).localeCompare(b.tanggal + b.id));
+    const sum = (fn) => list.reduce((a, o) => a + fn(o), 0);
+    const omzet = sum(orderTotal);
+    const hpp = sum((o) => sumLines((o.expenses || []).filter((e) => e.kategori === 'hpp')));
+    const cost = sum(orderCost);
+    const paid = sum(paidAmount);
+    return {
+      ym, list, count: list.length, qty: sum(orderQty), omzet, hpp, produksi: cost - hpp, cost, profit: omzet - cost,
+      margin: omzet ? ((omzet - cost) / omzet) * 100 : 0, paid, due: omzet - paid,
+      byStatus: { lunas: list.filter((o) => o.status === 'lunas').length, dp: list.filter((o) => o.status === 'dp').length, belum: list.filter((o) => o.status === 'belum').length },
+    };
+  };
+
+  function TrendChart({ data }) {
+    const W = 640, H = 230, L = 58, R = 8, T = 12, B = 28;
+    const max = Math.max(1, ...data.flatMap((d) => [d.omzet, d.cost, Math.max(0, d.profit)]));
+    const plotH = H - T - B;
+    const group = (W - L - R) / data.length;
+    const bw = Math.min(16, (group - 14) / 3);
+    const y = (v) => T + plotH - (Math.max(0, v) / max) * plotH;
+    const ticks = [0, 0.5, 1];
+    return html`
+      <svg viewBox=${'0 0 ' + W + ' ' + H} class="h-auto w-full" role="img" aria-label="Grafik batang omzet, pengeluaran, dan laba enam bulan terakhir">
+        ${ticks.map((t) => html`
+          <g key=${t}>
+            <line x1=${L} x2=${W - R} y1=${y(max * t)} y2=${y(max * t)} class="stroke-line" stroke-width="1" />
+            <text x=${L - 6} y=${y(max * t) + 3} textAnchor="end" fontSize="10" class="fill-mute">${compact(max * t)}</text>
+          </g>`)}
+        ${data.map((d, i) => {
+          const gx = L + i * group + (group - (bw * 3 + 8)) / 2;
+          const bars = [[d.omzet, 'fill-accent'], [d.cost, 'fill-mute'], [d.profit, 'fill-good']];
+          return html`
+            <g key=${d.ym}>
+              ${bars.map(([v, cls], j) => html`<rect key=${j} x=${gx + j * (bw + 4)} y=${y(v)} width=${bw} height=${Math.max(0, T + plotH - y(v))} rx="2" class=${cls} />`)}
+              <text x=${L + i * group + group / 2} y=${H - 9} textAnchor="middle" fontSize="11" class=${d.ym === data[data.length - 1].ym ? 'fill-ink font-semibold' : 'fill-mute'}>${MONTHS_SHORT[Number(d.ym.slice(5, 7)) - 1]}</text>
+            </g>`;
+        })}
+      </svg>`;
+  }
+
+  function ReportControls({ ym, onYm, years }) {
+    const [note, setNote] = useState(null);
+    const y = ym.slice(0, 4), m = ym.slice(5, 7);
+    const sel = `${inp} !w-auto`;
+    return html`
+      <div class="no-print flex flex-wrap items-center gap-2 rounded-2xl border border-line bg-surface p-3">
+        <button class="${btnGhost} !px-2.5" onClick=${() => onYm(shiftYm(ym, -1))} aria-label="Bulan sebelumnya"><${Icon} name="chevron-left" size=${16} /></button>
+        <select class=${sel} aria-label="Bulan laporan" value=${m} onChange=${(e) => onYm(y + '-' + e.target.value)}>
+          ${MONTHS.map((n, i) => html`<option key=${n} value=${String(i + 1).padStart(2, '0')}>${n}</option>`)}
+        </select>
+        <select class=${sel} aria-label="Tahun laporan" value=${y} onChange=${(e) => onYm(e.target.value + '-' + m)}>
+          ${years.map((v) => html`<option key=${v} value=${v}>${v}</option>`)}
+        </select>
+        <button class="${btnGhost} !px-2.5" onClick=${() => onYm(shiftYm(ym, 1))} aria-label="Bulan berikutnya"><${Icon} name="chevron-right" size=${16} /></button>
+        <button class=${btnGhost} onClick=${() => onYm(todayISO().slice(0, 7))}>Bulan ini</button>
+        <button class="${btnPrimary} ml-auto" onClick=${() => { setNote(null); tryPrint(() => setNote(PRINT_BLOCKED)); }}><${Icon} name="printer" size=${16} /> Cetak laporan</button>
+        ${note && html`<p role="status" class="w-full rounded-lg bg-warn-soft px-3 py-2 text-sm font-medium text-warn">${note}</p>`}
+      </div>`;
+  }
+
+  function ReportView({ orders, settings, ym }) {
+    const st = useMemo(() => monthStats(orders, ym), [orders, ym]);
+    const prev = useMemo(() => monthStats(orders, shiftYm(ym, -1)), [orders, ym]);
+    const trend = useMemo(() => [-5, -4, -3, -2, -1, 0].map((n) => monthStats(orders, shiftYm(ym, n))), [orders, ym]);
+    const ytd = useMemo(() => {
+      const y = ym.slice(0, 4), m = ym.slice(5, 7);
+      const list = orders.filter((o) => o.tanggal.slice(0, 4) === y && o.tanggal.slice(5, 7) <= m);
+      const omzet = list.reduce((a, o) => a + orderTotal(o), 0);
+      const cost = list.reduce((a, o) => a + orderCost(o), 0);
+      return { omzet, cost, profit: omzet - cost, count: list.length };
+    }, [orders, ym]);
+    const expense = useMemo(() => KATEGORI.map((k) => {
+      const map = {};
+      st.list.forEach((o) => (o.expenses || []).filter((e) => e.kategori === k.key).forEach((e) => {
+        const key = norm(e.nama) || '(tanpa nama)';
+        map[key] = map[key] || { nama: e.nama || '(tanpa nama)', total: 0 };
+        map[key].total += lineTotal(e);
+      }));
+      const rows = Object.values(map).sort((a, b) => b.total - a.total);
+      return { ...k, rows, total: rows.reduce((a, r) => a + r.total, 0) };
+    }), [st]);
+    const jenis = useMemo(() => {
+      const map = {};
+      st.list.forEach((o) => (o.items || []).forEach((l) => {
+        const key = norm(l.jenis) || '(tanpa jenis)';
+        map[key] = map[key] || { jenis: l.jenis || '(tanpa jenis)', qty: 0, total: 0 };
+        map[key].qty += num(l.qty);
+        map[key].total += lineTotal(l);
+      }));
+      return Object.values(map).sort((a, b) => b.total - a.total);
+    }, [st]);
+
+    const neg = st.profit < 0;
+    const th = 'px-3 py-2 text-xs font-semibold';
+    const td = 'px-3 py-2';
+    const num2 = 'text-right tabular-nums';
+    const h3 = 'mb-2 font-serif text-xl font-semibold';
+    const kpi = [
+      { label: 'Omzet', value: rupiah(st.omzet), sub: `${chg(st.omzet, prev.omzet)} dari bulan lalu`, subCls: chgCls(st.omzet, prev.omzet, true) },
+      { label: 'Total pengeluaran', value: rupiah(st.cost), sub: `${chg(st.cost, prev.cost)} dari bulan lalu`, subCls: 'text-mute' },
+      { label: 'Laba bersih', value: rupiah(st.profit), cls: neg ? 'text-bad' : 'text-good', sub: `${chg(st.profit, prev.profit)} dari bulan lalu`, subCls: chgCls(st.profit, prev.profit, true) },
+      { label: 'Margin keuntungan', value: pct(st.margin), cls: neg ? 'text-bad' : '', sub: `Bulan lalu ${pct(prev.margin)}`, subCls: 'text-mute' },
+    ];
+    const plRow = (label, cur, before, opts = {}) => html`
+      <tr class=${(opts.bold ? 'font-bold ' : '') + (opts.top ? 'border-t-2 border-accent ' : 'border-t border-line ')}>
+        <td class=${td + (opts.indent ? ' pl-7 text-mute' : '')}>${label}</td>
+        <td class="${td} ${num2} ${opts.cls || ''}">${rupiah(cur)}</td>
+        <td class="${td} ${num2} text-mute">${rupiah(before)}</td>
+        <td class="${td} ${num2} ${chgCls(cur, before, opts.goodUp)}">${chg(cur, before)}</td>
+      </tr>`;
+
+    return html`
+      <article class="sheet mx-auto w-full max-w-[210mm] rounded-sm border border-line bg-surface p-6 text-ink shadow-sm sm:p-[14mm]">
+        <header class="flex flex-wrap items-start justify-between gap-4 border-b-2 border-accent pb-5">
+          <div class="flex items-center gap-3">
+            <div class="grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 border-accent font-serif text-2xl font-semibold text-accent">${(settings.nama || 'A').trim().charAt(0).toUpperCase()}</div>
+            <div>
+              <p class="font-serif text-2xl font-semibold leading-none">${settings.nama}</p>
+              <p class="mt-1 text-xs text-mute">${settings.tagline}</p>
+              <p class="text-xs text-mute">${settings.alamat}</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <h1 class="font-serif text-3xl font-semibold leading-none text-accent">Laporan Keuangan</h1>
+            <p class="mt-2 text-sm font-semibold">Periode ${ymTitle(ym)}</p>
+            <p class="text-xs text-mute">Disusun ${fmtDate(todayISO())}</p>
+          </div>
+        </header>
+
+        <section class="break-avoid mt-6 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-line bg-line sm:grid-cols-4" aria-label="Ringkasan bulan ini">
+          ${kpi.map((k) => html`
+            <div key=${k.label} class="bg-surface p-3">
+              <p class="text-xs font-semibold text-mute">${k.label}</p>
+              <p class="mt-1 text-lg font-bold tabular-nums ${k.cls || ''}">${k.value}</p>
+              <p class="mt-0.5 text-xs ${k.subCls}">${k.sub}</p>
+            </div>`)}
+        </section>
+        <p class="mt-2 text-xs text-mute">Akumulasi Januari sampai ${MONTHS[Number(ym.slice(5, 7)) - 1]} ${ym.slice(0, 4)}: omzet ${rupiah(ytd.omzet)}, pengeluaran ${rupiah(ytd.cost)}, laba bersih ${rupiah(ytd.profit)} dari ${ytd.count} pesanan.</p>
+
+        <section class="break-avoid mt-8">
+          <h2 class=${h3}>Laba rugi</h2>
+          <div class="overflow-x-auto">
+            <table class="w-full min-w-[460px] text-sm">
+              <thead><tr class="bg-accent-soft text-left"><th class=${th}>Keterangan</th><th class="${th} text-right">${ymTitle(ym)}</th><th class="${th} text-right">${ymTitle(shiftYm(ym, -1))}</th><th class="${th} text-right">Perubahan</th></tr></thead>
+              <tbody>
+                ${plRow('Pendapatan dari pesanan', st.omzet, prev.omzet, { bold: true, goodUp: true })}
+                ${plRow('HPP (bahan baku dan material)', st.hpp, prev.hpp, { indent: true })}
+                ${plRow('Biaya produksi', st.produksi, prev.produksi, { indent: true })}
+                ${plRow('Total pengeluaran', st.cost, prev.cost, { bold: true })}
+                ${plRow('Laba bersih', st.profit, prev.profit, { bold: true, top: true, goodUp: true, cls: neg ? 'text-bad' : 'text-good' })}
+                <tr class="border-t border-line"><td class=${td + ' text-mute'}>Margin keuntungan</td><td class="${td} ${num2}">${pct(st.margin)}</td><td class="${td} ${num2} text-mute">${pct(prev.margin)}</td><td class="${td} ${num2} text-mute">${(st.margin - prev.margin >= 0 ? '+' : '−') + pct(Math.abs(st.margin - prev.margin)).replace('%', '')} poin</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <section class="break-avoid mt-8">
+          <h2 class=${h3}>Kas dan tagihan</h2>
+          <dl class="grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
+            <div class="rounded-lg border border-line p-3"><dt class="text-xs text-mute">Sudah diterima</dt><dd class="mt-1 font-bold tabular-nums text-good">${rupiah(st.paid)}</dd></div>
+            <div class="rounded-lg border border-line p-3"><dt class="text-xs text-mute">Sisa tagihan</dt><dd class="mt-1 font-bold tabular-nums ${st.due > 0 ? 'text-warn' : ''}">${rupiah(st.due)}</dd></div>
+            <div class="rounded-lg border border-line p-3"><dt class="text-xs text-mute">Tingkat penagihan</dt><dd class="mt-1 font-bold tabular-nums">${pct(st.omzet ? (st.paid / st.omzet) * 100 : 0)}</dd></div>
+            <div class="rounded-lg border border-line p-3"><dt class="text-xs text-mute">Status pembayaran</dt><dd class="mt-1 text-sm font-semibold tabular-nums">${st.byStatus.lunas} lunas, ${st.byStatus.dp} DP, ${st.byStatus.belum} belum bayar</dd></div>
+          </dl>
+        </section>
+
+        <section class="break-avoid mt-8">
+          <h2 class=${h3}>Pengeluaran per jenis</h2>
+          ${st.cost === 0 ? html`<p class="text-sm text-mute">Belum ada pengeluaran tercatat pada periode ini.</p>` : html`
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[420px] text-sm">
+                <thead><tr class="bg-accent-soft text-left"><th class=${th}>Jenis pengeluaran</th><th class="${th} text-right">Total</th><th class="${th} text-right">% dari pengeluaran</th></tr></thead>
+                ${expense.filter((g) => g.rows.length).map((g) => html`
+                  <tbody key=${g.key}>
+                    <tr class="border-t border-line bg-tint"><td colSpan="3" class="px-3 py-1.5 text-xs font-bold">${g.title}, ${g.hint}</td></tr>
+                    ${g.rows.map((r) => html`
+                      <tr key=${r.nama} class="border-t border-line"><td class=${td}>${r.nama}</td><td class="${td} ${num2}">${rupiah(r.total)}</td><td class="${td} ${num2} text-mute">${pct(st.cost ? (r.total / st.cost) * 100 : 0)}</td></tr>`)}
+                    <tr class="border-t border-line font-semibold"><td class=${td}>Subtotal ${g.title}</td><td class="${td} ${num2}">${rupiah(g.total)}</td><td class="${td} ${num2} text-mute">${pct(st.cost ? (g.total / st.cost) * 100 : 0)}</td></tr>
+                  </tbody>`)}
+              </table>
+            </div>`}
+        </section>
+
+        <section class="break-avoid mt-8">
+          <h2 class=${h3}>Penjualan per jenis produk</h2>
+          ${jenis.length === 0 ? html`<p class="text-sm text-mute">Belum ada pesanan pada periode ini.</p>` : html`
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[420px] text-sm">
+                <thead><tr class="bg-accent-soft text-left"><th class=${th}>Jenis</th><th class="${th} text-right">Jumlah (pcs)</th><th class="${th} text-right">Nilai</th><th class="${th} text-right">% dari omzet</th></tr></thead>
+                <tbody>
+                  ${jenis.map((r) => html`
+                    <tr key=${r.jenis} class="border-t border-line"><td class=${td}>${r.jenis}</td><td class="${td} ${num2}">${r.qty.toLocaleString('id-ID')}</td><td class="${td} ${num2}">${rupiah(r.total)}</td><td class="${td} ${num2} text-mute">${pct(st.omzet ? (r.total / st.omzet) * 100 : 0)}</td></tr>`)}
+                </tbody>
+              </table>
+            </div>`}
+        </section>
+
+        <section class="break-avoid mt-8">
+          <h2 class=${h3}>Tren enam bulan terakhir</h2>
+          <${TrendChart} data=${trend} />
+          <div class="mt-2 flex flex-wrap gap-x-5 gap-y-1 text-xs text-mute">
+            <span class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-sm bg-accent"></span>Omzet</span>
+            <span class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-sm bg-mute"></span>Pengeluaran</span>
+            <span class="inline-flex items-center gap-1.5"><span class="h-2.5 w-2.5 rounded-sm bg-good"></span>Laba bersih</span>
+          </div>
+        </section>
+
+        <section class="mt-8">
+          <h2 class=${h3}>Rincian transaksi</h2>
+          ${st.count === 0 ? html`<p class="text-sm text-mute">Belum ada pesanan pada periode ini.</p>` : html`
+            <div class="overflow-x-auto">
+              <table class="w-full min-w-[620px] text-sm">
+                <thead><tr class="bg-accent-soft text-left"><th class=${th}>Tanggal</th><th class=${th}>Invoice dan klien</th><th class="${th} text-right">Nilai order</th><th class="${th} text-right">Pengeluaran</th><th class="${th} text-right">Laba</th><th class=${th}>Pembayaran</th></tr></thead>
+                <tbody>
+                  ${st.list.map((o) => html`
+                    <tr key=${o.id} class="break-avoid border-t border-line align-top">
+                      <td class="${td} whitespace-nowrap">${fmtShort(o.tanggal)}</td>
+                      <td class=${td}><p class="font-medium">${o.nama}</p><p class="text-xs text-mute">${o.id}</p></td>
+                      <td class="${td} ${num2}">${rupiah(orderTotal(o))}</td>
+                      <td class="${td} ${num2} text-mute">${rupiah(orderCost(o))}</td>
+                      <td class="${td} ${num2} ${orderProfit(o) < 0 ? 'text-bad' : ''}">${rupiah(orderProfit(o))}</td>
+                      <td class=${td}>${STATUS[o.status].label}${o.status === 'dp' ? html`<p class="text-xs text-mute tabular-nums">${rupiah(paidAmount(o))}</p>` : ''}</td>
+                    </tr>`)}
+                  <tr class="border-t-2 border-accent font-bold">
+                    <td class=${td} colSpan="2">Total ${st.count} pesanan</td>
+                    <td class="${td} ${num2}">${rupiah(st.omzet)}</td><td class="${td} ${num2}">${rupiah(st.cost)}</td>
+                    <td class="${td} ${num2} ${neg ? 'text-bad' : 'text-good'}">${rupiah(st.profit)}</td><td class=${td}></td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>`}
+        </section>
+
+        <footer class="mt-10 flex flex-wrap items-end justify-between gap-6 border-t border-line pt-4 text-xs text-mute">
+          <p class="max-w-sm">Laporan dibuat otomatis dari pesanan yang tercatat pada tanggal order di bulan ini. Nilai pengeluaran mengikuti HPP dan biaya produksi tiap pesanan.</p>
+          <div class="text-center text-sm"><p class="text-mute">Disusun oleh</p><p class="mt-10 border-t border-ink pt-1 font-semibold text-ink">${settings.penandatangan}</p></div>
+        </footer>
+      </article>`;
+  }
+
+  /* ---------- Cetak dan unduh ---------- */
+  // Browser memblokir window.print() di dalam iframe artifact; bila tidak ada dialog cetak yang terbuka, beri tahu pengguna.
+  function tryPrint(onBlocked) {
+    let fired = false;
+    const mark = () => { fired = true; };
+    window.addEventListener('beforeprint', mark);
+    try { window.print(); } catch (e) { window.removeEventListener('beforeprint', mark); onBlocked(); return; }
+    setTimeout(() => { window.removeEventListener('beforeprint', mark); if (!fired) onBlocked(); }, 600);
+  }
+  const PRINT_BLOCKED = 'Cetak langsung diblokir oleh pratinjau artifact. Gunakan Unduh PDF lalu cetak dari file PDF-nya, atau buka halaman ini langsung di tab browser.';
+
+  // Simpan file lewat fitur unduhan artifact (dengan konfirmasi); cadangan: unduhan biasa bila halaman dibuka langsung di tab
+  async function saveFile(filename, bytes, mime = 'application/pdf') {
+    let dl = null;
+    try { dl = window.claude && window.claude.use ? await window.claude.use('downloads') : null; } catch (e) { dl = null; }
+    if (dl) return dl.save({ filename, data: bytes });
+    const url = URL.createObjectURL(new Blob([bytes], { type: mime }));
+    const a = document.createElement('a');
+    a.href = url; a.download = filename;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 3000);
+    return { status: 'saved' };
+  }
+
+  /* ---------- Invoice ---------- */
+  // Tanda cek (6 karakter) dihitung dari kode + status + total + dibayar: QR berubah setiap kali salah satunya berubah
+  const qrSig = (o) => {
+    let x = 2166136261;
+    for (const ch of `${kodeFor(o)}|${o.status}|${orderTotal(o)}|${paidAmount(o)}`) { x ^= ch.charCodeAt(0); x = Math.imul(x, 16777619) >>> 0; }
+    let out = '';
+    for (let i = 0; i < 6; i++) { x = (Math.imul(x, 1664525) + 1013904223) >>> 0; out += KODE_CHARS[(x >>> 16) % KODE_CHARS.length]; }
+    return out;
+  };
+  const rpPlain = (n) => 'Rp ' + num(n).toLocaleString('id-ID');
+  // Isi QR (teks biasa, terbaca saat dipindai): nomor, status, nominal, kode unik, tanda cek
+  const qrPayload = (o) => {
+    const total = orderTotal(o), paid = paidAmount(o);
+    return `Invoice ${o.id} | Status ${STATUS[o.status].label.toUpperCase()} | Total ${rpPlain(total)} | Dibayar ${rpPlain(paid)} | Sisa ${rpPlain(total - paid)} | Kode ${kodeFor(o)} | Cek ${qrSig(o)}`;
+  };
+
+  function QrCode({ value }) {
+    let path = '', n = 0;
+    try {
+      const qr = qrcode(0, 'M');
+      qr.addData(value);
+      qr.make();
+      n = qr.getModuleCount();
+      for (let r = 0; r < n; r++) for (let c = 0; c < n; c++) if (qr.isDark(r, c)) path += `M${c + 4} ${r + 4}h1v1h-1z`;
+    } catch (e) { path = ''; }
+    if (!path) return html`<div class="grid h-28 w-28 place-items-center text-center text-xs text-mute">QR code gagal dimuat</div>`;
+    return html`
+      <svg viewBox=${'0 0 ' + (n + 8) + ' ' + (n + 8)} shapeRendering="crispEdges" class="block h-28 w-28" role="img" aria-label=${'QR code ' + value}>
+        <rect width=${n + 8} height=${n + 8} fill="#ffffff" />
+        <path d=${path} fill="#1B1210" />
+      </svg>`;
+  }
+
+  function Sheet({ o, s }) {
+    const total = orderTotal(o), paid = paidAmount(o), sisa = total - paid;
+    const initial = (s.nama || 'A').trim().charAt(0).toUpperCase();
+    const label = 'text-xs font-semibold text-mute';
+    return html`
+      <article class="sheet mx-auto flex min-h-[297mm] w-full max-w-[210mm] flex-col rounded-sm bg-surface p-6 text-ink shadow-xl sm:p-[14mm]">
+        <header class="flex items-start justify-between gap-4 border-b-2 border-accent pb-5">
+          <div class="flex items-center gap-3">
+            <div class="grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 border-accent font-serif text-2xl font-semibold text-accent">${initial}</div>
+            <div>
+              <h1 class="font-serif text-2xl font-semibold leading-none sm:text-3xl">${s.nama}</h1>
+              <p class="mt-1 text-xs text-mute">${s.tagline}</p>
+              <p class="mt-1 text-xs text-mute">${s.alamat}</p>
+              <p class="text-xs text-mute">${s.kontak}</p>
+            </div>
+          </div>
+          <div class="text-right">
+            <p class="font-serif text-3xl font-semibold leading-none text-accent sm:text-4xl">Invoice</p>
+            <p class="mt-2 text-xs text-mute">No. ${o.id}</p>
+          </div>
+        </header>
+
+        <section class="grid gap-5 py-6 sm:grid-cols-2">
+          <div>
+            <p class=${label}>Ditagihkan kepada</p>
+            <p class="mt-1 text-base font-bold">${o.nama}</p>
+            ${o.wa && html`<p class="text-sm">${o.wa}</p>`}
+            ${o.alamat && html`<p class="whitespace-pre-line text-sm text-mute">${o.alamat}</p>`}
+          </div>
+          <dl class="grid grid-cols-[auto_1fr] gap-x-6 gap-y-1.5 text-sm sm:justify-self-end">
+            <dt class="text-mute">Tanggal order</dt><dd class="text-right font-medium">${fmtDate(o.tanggal)}</dd>
+            <dt class="text-mute">Deadline pengerjaan</dt><dd class="text-right font-medium">${fmtDate(o.deadline)}</dd>
+            <dt class="text-mute">Status pembayaran</dt><dd class="text-right"><${Badge} status=${o.status} /></dd>
+          </dl>
+        </section>
+
+        <div class="overflow-x-auto">
+          <table class="w-full min-w-[480px] text-left text-sm">
+            <thead>
+              <tr class="bg-accent-soft text-xs font-semibold">
+                <th class="px-3 py-2.5">Jenis dan produk</th>
+                <th class="px-3 py-2.5 text-right">Jumlah</th>
+                <th class="px-3 py-2.5 text-right">Harga satuan</th>
+                <th class="px-3 py-2.5 text-right">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+${(o.items || []).map((l, i) => html`
+                <tr key=${i} class="border-b border-line">
+                  <td class="px-3 py-3"><p class="font-medium">${l.jenis}</p><p class="text-xs text-mute">${l.produk}</p>${l.ket && html`<p class="mt-0.5 text-xs italic text-mute">${l.ket}</p>`}</td>
+                  <td class="px-3 py-3 text-right tabular-nums">${num(l.qty).toLocaleString('id-ID')} pcs</td>
+                  <td class="px-3 py-3 text-right tabular-nums">${rupiah(l.price)}</td>
+                  <td class="px-3 py-3 text-right font-semibold tabular-nums">${rupiah(lineTotal(l))}</td>
+                </tr>`)}
+            </tbody>
+          </table>
+        </div>
+
+        <dl class="ml-auto mt-4 w-full space-y-1.5 text-sm sm:w-80">
+          <div class="flex justify-between"><dt class="text-mute">Total tagihan</dt><dd class="tabular-nums font-semibold">${rupiah(total)}</dd></div>
+          ${paid > 0 && html`<div class="flex justify-between"><dt class="text-mute">${o.status === 'lunas' ? 'Telah dibayar' : 'DP diterima'}</dt><dd class="tabular-nums">− ${rupiah(paid)}</dd></div>`}
+          <div class="flex justify-between border-t-2 border-accent pt-2 text-base"><dt class="font-bold">${sisa > 0 ? 'Sisa yang harus dibayar' : 'Sisa tagihan'}</dt><dd class="tabular-nums font-bold text-accent">${rupiah(sisa)}</dd></div>
+        </dl>
+
+        <section class="mt-6 rounded-lg bg-accent-soft p-4 text-sm">
+          <p class="mb-1 font-bold">Instruksi pembayaran</p>
+          <p>Transfer ke <span class="font-semibold">${s.bank} ${s.rekening}</span> a.n. ${s.atasNama}</p>
+          <p class="mt-1 text-mute">Cantumkan nomor invoice ${o.id} pada berita transfer, lalu kirim bukti transfer melalui WhatsApp.</p>
+          ${s.catatan && html`<p class="mt-2 text-mute">${s.catatan}</p>`}
+        </section>
+
+        <footer class="mt-auto flex flex-col-reverse gap-8 pt-12 sm:flex-row sm:items-end sm:justify-between">
+          <p class="max-w-xs font-serif text-base italic text-mute">Terima kasih telah mempercayakan undangan hari bahagia Anda kepada kami.</p>
+          <div class="flex flex-col items-center text-center text-sm">
+            <p class="text-mute">Disahkan oleh</p>
+            <div class="mt-2 rounded border border-line bg-white p-1.5"><${QrCode} value=${qrPayload(o)} /></div>
+            <p class="mt-1.5 text-xs font-semibold tracking-widest tabular-nums">${fmtKode(kodeFor(o))}</p>
+            <p class="mt-2 font-semibold">${s.penandatangan}</p>
+          </div>
+        </footer>
+      </article>`;
+  }
+
+  // Membuat PDF A4 sungguhan (teks bisa dipilih, QR tajam) langsung dari data pesanan
+  async function buildDocPdf(o, s) {
+    const { PDFDocument, StandardFonts, rgb } = window.PDFLib;
+    const doc = await PDFDocument.create();
+    doc.setTitle('Invoice ' + o.id);
+    doc.setAuthor(s.nama);
+    const F = {
+      r: await doc.embedFont(StandardFonts.Helvetica), b: await doc.embedFont(StandardFonts.HelveticaBold), i: await doc.embedFont(StandardFonts.HelveticaOblique),
+      sb: await doc.embedFont(StandardFonts.TimesRomanBold), si: await doc.embedFont(StandardFonts.TimesRomanItalic),
+    };
+    const c = (r, g, b) => rgb(r / 255, g / 255, b / 255);
+    const C = { ink: c(43, 29, 26), mute: c(122, 106, 99), line: c(230, 219, 200), accent: c(164, 25, 43), soft: c(247, 232, 226), good: c(47, 107, 63), warn: c(154, 98, 0), bad: c(190, 52, 24), white: c(255, 255, 255) };
+    const W = 595.28, H = 841.89, M = 42;
+    let page = doc.addPage([W, H]);
+    let y = H - M;
+
+    const clean = (t) => String(t == null ? '' : t).replace(/[\u00a0\u202f]/g, ' ').replace(/\u2212/g, '-').replace(/[\u2018\u2019]/g, "'").replace(/[\u201c\u201d]/g, '"').replace(/\u2013/g, '-');
+    const safe = (font, t) => Array.from(clean(t)).map((ch) => { try { font.encodeText(ch); return ch; } catch (e) { return '?'; } }).join('');
+    const text = (t, x, yy, o2 = {}) => {
+      const { size = 10, font = F.r, color = C.ink, align = 'left' } = o2;
+      const str = safe(font, t);
+      const w = font.widthOfTextAtSize(str, size);
+      page.drawText(str, { x: align === 'right' ? x - w : align === 'center' ? x - w / 2 : x, y: yy, size, font, color });
+      return w;
+    };
+    const wrap = (t, font, size, maxW) => {
+      const out = [];
+      safe(font, t).split('\n').forEach((para) => {
+        let line = '';
+        para.split(/\s+/).filter(Boolean).forEach((w) => {
+          const test = line ? line + ' ' + w : w;
+          if (font.widthOfTextAtSize(test, size) <= maxW) line = test;
+          else { if (line) out.push(line); line = w; }
+        });
+        out.push(line);
+      });
+      return out;
+    };
+    const hline = (yy, color, thickness, x1 = M, x2 = W - M) => page.drawLine({ start: { x: x1, y: yy }, end: { x: x2, y: yy }, thickness, color });
+
+    const total = orderTotal(o), paid = paidAmount(o), sisa = total - paid;
+    const stColor = o.status === 'lunas' ? C.good : o.status === 'dp' ? C.warn : C.bad;
+
+    // Kop
+    page.drawCircle({ x: M + 20, y: y - 20, size: 20, borderColor: C.accent, borderWidth: 1.6 });
+    text((s.nama || 'A').trim().charAt(0).toUpperCase(), M + 20, y - 27, { size: 22, font: F.sb, color: C.accent, align: 'center' });
+    text(s.nama, M + 52, y - 14, { size: 19, font: F.sb });
+    text(s.tagline, M + 52, y - 27, { size: 8.5, color: C.mute });
+    text(s.alamat, M + 52, y - 38, { size: 8.5, color: C.mute });
+    text(s.kontak, M + 52, y - 48, { size: 8.5, color: C.mute });
+    text('Invoice', W - M, y - 20, { size: 28, font: F.sb, color: C.accent, align: 'right' });
+    text('No. ' + o.id, W - M, y - 36, { size: 9, color: C.mute, align: 'right' });
+    y -= 62;
+    hline(y, C.accent, 1.6);
+    y -= 24;
+
+    // Klien dan keterangan
+    const top = y;
+    text('Ditagihkan kepada', M, y, { size: 8, font: F.b, color: C.mute }); y -= 15;
+    text(o.nama, M, y, { size: 12.5, font: F.b }); y -= 14;
+    if (o.wa) { text(o.wa, M, y, { size: 9.5 }); y -= 12; }
+    if (o.alamat) wrap(o.alamat, F.r, 9, 250).forEach((l) => { text(l, M, y, { size: 9, color: C.mute }); y -= 11; });
+    let ry = top;
+    [['Tanggal order', fmtDate(o.tanggal), C.ink], ['Deadline pengerjaan', fmtDate(o.deadline), C.ink], ['Status pembayaran', STATUS[o.status].label, stColor]].forEach(([k, v, col]) => {
+      text(k, W - M - 175, ry, { size: 9, color: C.mute });
+      text(v, W - M, ry, { size: 9.5, font: F.b, color: col, align: 'right' });
+      ry -= 15;
+    });
+    y = Math.min(y, ry) - 14;
+
+    // Tabel item
+    const xQty = M + 338, xPrice = M + 424, xTotal = W - M - 8;
+    const tableHead = () => {
+      page.drawRectangle({ x: M, y: y - 19, width: W - 2 * M, height: 22, color: C.soft });
+      text('Jenis dan produk', M + 8, y - 11, { size: 8.5, font: F.b });
+      text('Jumlah', xQty, y - 11, { size: 8.5, font: F.b, align: 'right' });
+      text('Harga satuan', xPrice, y - 11, { size: 8.5, font: F.b, align: 'right' });
+      text('Total', xTotal, y - 11, { size: 8.5, font: F.b, align: 'right' });
+      y -= 28;
+    };
+    const newPage = () => { page = doc.addPage([W, H]); y = H - M; };
+    tableHead();
+    (o.items || []).forEach((l) => {
+      const lines = [];
+      wrap(l.jenis, F.b, 10, 290).forEach((t) => lines.push({ t, font: F.b, size: 10, color: C.ink }));
+      if (l.produk) wrap(l.produk, F.r, 8.5, 290).forEach((t) => lines.push({ t, font: F.r, size: 8.5, color: C.mute }));
+      if (l.ket) wrap(l.ket, F.i, 8.5, 290).forEach((t) => lines.push({ t, font: F.i, size: 8.5, color: C.mute }));
+      const h = lines.reduce((a, ln) => a + ln.size + 3.5, 0) + 10;
+      if (y - h < M + 40) { newPage(); tableHead(); }
+      let ly = y - 4;
+      lines.forEach((ln) => { text(ln.t, M + 8, ly - ln.size + 2, ln); ly -= ln.size + 3.5; });
+      text(num(l.qty).toLocaleString('id-ID') + ' pcs', xQty, y - 12, { size: 9.5, align: 'right' });
+      text(rupiah(l.price), xPrice, y - 12, { size: 9.5, align: 'right' });
+      text(rupiah(lineTotal(l)), xTotal, y - 12, { size: 9.5, font: F.b, align: 'right' });
+      y -= h;
+      hline(y, C.line, 0.8);
+    });
+
+    // Total
+    if (y < M + 120) newPage();
+    y -= 18;
+    const tx = W - M - 230;
+    const trow = (label, value, o2 = {}) => {
+      text(label, tx, y, { size: o2.size || 9.5, font: o2.bold ? F.b : F.r, color: o2.bold ? C.ink : C.mute });
+      text(value, W - M, y, { size: o2.size || 9.5, font: o2.bold || o2.big ? F.b : F.r, color: o2.color || C.ink, align: 'right' });
+      y -= o2.gap || 16;
+    };
+    trow('Total tagihan', rupiah(total), { bold: true });
+    if (paid > 0) trow(o.status === 'lunas' ? 'Telah dibayar' : 'DP diterima', '- ' + rupiah(paid));
+    hline(y + 8, C.accent, 1.4, tx, W - M);
+    y -= 4;
+    trow(sisa > 0 ? 'Sisa yang harus dibayar' : 'Sisa tagihan', rupiah(sisa), { bold: true, size: 11, color: C.accent, gap: 22 });
+
+    // Instruksi pembayaran
+    const bw = W - 2 * M - 24;
+    const blocks = [
+      { k: 'Instruksi pembayaran', lines: [{ t: `Transfer ke ${s.bank} ${s.rekening} a.n. ${s.atasNama}`, font: F.b, size: 10 }] },
+      { k: null, lines: wrap(`Cantumkan nomor invoice ${o.id} pada berita transfer, lalu kirim bukti transfer melalui WhatsApp.`, F.r, 9, bw).map((t) => ({ t, font: F.r, size: 9, color: C.mute })) },
+    ];
+    if (s.catatan) blocks.push({ k: null, lines: wrap(s.catatan, F.r, 9, bw).map((t) => ({ t, font: F.r, size: 9, color: C.mute })) });
+    const bh = blocks.reduce((a, b2) => a + (b2.k ? 12 : 0) + b2.lines.reduce((x, ln) => x + ln.size + 3, 0) + 6, 0) + 14;
+    if (y - bh < M + 170) newPage();
+    y -= 4;
+    page.drawRectangle({ x: M, y: y - bh, width: W - 2 * M, height: bh, color: C.soft, borderColor: C.soft, borderWidth: 1 });
+    let by = y - 14;
+    blocks.forEach((b2) => {
+      if (b2.k) { text(b2.k, M + 12, by, { size: 8, font: F.b, color: C.mute }); by -= 12; }
+      b2.lines.forEach((ln) => { text(ln.t, M + 12, by - ln.size + 8, { size: ln.size, font: ln.font, color: ln.color || C.ink }); by -= ln.size + 3; });
+      by -= 6;
+    });
+    y -= bh;
+
+    // Penutup: terima kasih dan QR pengesahan
+    if (y < M + 170) newPage();
+    const fb = M;                       // dasar penutup
+    const fy = fb + 150;                // atas penutup
+    wrap('Terima kasih telah mempercayakan undangan hari bahagia Anda kepada kami.', F.si, 12, 230).forEach((t, i) => text(t, M, fy - 12 - i * 15, { size: 12, font: F.si, color: C.mute }));
+    const cx = W - M - 62;
+    text('Disahkan oleh', cx, fy, { size: 9, color: C.mute, align: 'center' });
+    const box = 104;
+    page.drawRectangle({ x: cx - box / 2, y: fy - 10 - box, width: box, height: box, color: C.white, borderColor: C.line, borderWidth: 0.8 });
+    try {
+      const qr = qrcode(0, 'M');
+      qr.addData(qrPayload(o));
+      qr.make();
+      const n = qr.getModuleCount();
+      const unit = (box - 8) / (n + 8);
+      const ox = cx - box / 2 + 4 + unit * 4;
+      const oy = fy - 10 - 4 - unit * 4;
+      for (let r = 0; r < n; r++) {
+        let start = -1;
+        for (let col = 0; col <= n; col++) {
+          const dark = col < n && qr.isDark(r, col);
+          if (dark && start < 0) start = col;
+          if (!dark && start >= 0) {
+            page.drawRectangle({ x: ox + start * unit - 0.15, y: oy - (r + 1) * unit - 0.15, width: (col - start) * unit + 0.3, height: unit + 0.3, color: C.ink });
+            start = -1;
+          }
+        }
+      }
+    } catch (e) { /* tanpa QR bila pustaka tidak tersedia */ }
+    text(fmtKode(kodeFor(o)), cx, fy - box - 24, { size: 9, font: F.b, align: 'center' });
+    text(s.penandatangan, cx, fy - box - 38, { size: 10, font: F.b, align: 'center' });
+    return doc.save();
+  }
+
+  function InvoiceModal({ o, s, onClose }) {
+    const [note, setNote] = useState(null);
+    const [busy, setBusy] = useState(false);
+    const doPrint = () => { setNote(null); tryPrint(() => setNote({ tone: 'warn', text: PRINT_BLOCKED })); };
+    const doDownload = async () => {
+      setNote(null);
+      if (!window.PDFLib) { setNote({ tone: 'warn', text: 'Pustaka PDF belum termuat. Muat ulang halaman lalu coba lagi.' }); return; }
+      setBusy(true);
+      try {
+        const bytes = await buildDocPdf(o, s);
+        const name = `Invoice-${o.id}.pdf`.replace(/[^\w.\-]+/g, '_');
+        const res = await saveFile(name, bytes);
+        setNote({ tone: 'ok', text: res && res.status === 'delivered' ? 'File dikirim.' : `${name} siap disimpan.` });
+      } catch (e) {
+        const code = e && e.code;
+        setNote({ tone: 'warn', text: code === 'declined' ? 'Unduhan dibatalkan.' : code === 'rate_limited' ? 'Tunggu sebentar lalu coba unduh lagi.' : 'Unduhan belum bisa dilakukan di tampilan ini. Buka halaman langsung di tab browser lalu coba lagi.' });
+      }
+      setBusy(false);
+    };
+    return html`
+      <${Modal} onClose=${onClose} width="max-w-[230mm]">
+        <div class="no-print sticky top-0 z-10 bg-surface sm:mb-4 sm:rounded-xl sm:border sm:border-line">
+          <div class="flex flex-wrap items-center justify-between gap-2 px-4 py-3">
+            <div class="min-w-0">
+              <p class="text-xs font-semibold text-mute">Invoice</p>
+              <p class="truncate text-sm font-bold">${o.id}, ${o.nama}</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button class=${btnPrimary} onClick=${doDownload} disabled=${busy}><${Icon} name="download" size=${16} /> ${busy ? 'Menyiapkan...' : 'Unduh PDF'}</button>
+              <button class=${btnGhost} onClick=${doPrint}><${Icon} name="printer" size=${16} /> Cetak</button>
+              <button class=${btnGhost} onClick=${onClose}><${Icon} name="x" size=${16} /> Tutup</button>
+            </div>
+          </div>
+          ${note && html`<p role="status" class=${'border-t border-line px-4 py-2 text-sm font-medium sm:rounded-b-xl ' + (note.tone === 'warn' ? 'bg-warn-soft text-warn' : 'bg-good-soft text-good')}>${note.text}</p>`}
+        </div>
+        <${Sheet} o=${o} s=${s} />
+        <div class="no-print h-6"></div>
+      <//>`;
+  }
+
+  /* ---------- Pengaturan usaha ---------- */
+  function SettingsModal({ settings, onSave, onReset, onClose, allowDemo, orderCount, onExport, onImport }) {
+    const [f, setF] = useState(settings);
+    const [imp, setImp] = useState(null);
+    const pickFile = async (e) => {
+      const file = e.target.files && e.target.files[0];
+      e.target.value = '';
+      if (!file) return;
+      if (file.size > 20 * 1024 * 1024) { setImp({ error: 'File terlalu besar (maksimal 20 MB).' }); return; }
+      setImp(parseBackup(await file.text()));
+    };
+    const [confirmReset, setConfirmReset] = useState(false);
+    const set = (k) => (e) => setF((p) => ({ ...p, [k]: e.target.value }));
+    const setList = (k) => (arr) => setF((p) => ({ ...p, [k]: arr }));
+    return html`
+      <${Modal} onClose=${onClose} closeOnBackdrop=${false} width="max-w-2xl">
+        <div class="flex min-h-full flex-col bg-surface sm:min-h-0 sm:rounded-2xl sm:border sm:border-line">
+          <div class="flex items-center justify-between border-b border-line px-5 py-4">
+            <h2 class="text-lg font-bold">Pengaturan usaha</h2>
+            <button class="rounded-lg p-2 text-mute hover:bg-tint" onClick=${onClose} aria-label="Tutup"><${Icon} name="x" /></button>
+          </div>
+          <div class="grid flex-1 gap-4 px-5 py-5 sm:grid-cols-2">
+            <p class="text-sm text-mute sm:col-span-2">Data ini tampil di kop dan instruksi pembayaran pada invoice. Isinya masih contoh, silakan ganti dengan data usaha Anda.</p>
+            <${Field} label="Nama usaha"><input class=${inp} value=${f.nama} onChange=${set('nama')} /><//>
+            <${Field} label="Tagline"><input class=${inp} value=${f.tagline} onChange=${set('tagline')} /><//>
+            <${Field} label="Alamat usaha"><input class=${inp} value=${f.alamat} onChange=${set('alamat')} /><//>
+            <${Field} label="Kontak usaha"><input class=${inp} value=${f.kontak} onChange=${set('kontak')} /><//>
+            <${Field} label="Nama bank"><input class=${inp} value=${f.bank} onChange=${set('bank')} /><//>
+            <${Field} label="No. rekening"><input class=${inp} value=${f.rekening} onChange=${set('rekening')} /><//>
+            <${Field} label="Atas nama rekening"><input class=${inp} value=${f.atasNama} onChange=${set('atasNama')} /><//>
+            <${Field} label="Nama finance (tercetak di bawah QR code)"><input class=${inp} value=${f.penandatangan} onChange=${set('penandatangan')} /><//>
+            <${Field} label="Catatan di invoice" className="sm:col-span-2"><textarea rows="3" class=${inp} value=${f.catatan} onChange=${set('catatan')}></textarea><//>
+            <div class="border-t border-line pt-4 sm:col-span-2"><p class="text-sm font-bold">Pilihan di form pesanan</p><p class="text-xs text-mute">Daftar ini muncul sebagai pilihan saat mengisi pengeluaran. Isian di form tetap boleh diketik manual.</p></div>
+            <${ListEditor} label="Daftar satuan" items=${f.satuan || []} onChange=${setList('satuan')} placeholder="Tambah satuan, mis. lembar" />
+            <${ListEditor} label="Jenis pengeluaran HPP" items=${f.saranHpp || []} onChange=${setList('saranHpp')} placeholder="Tambah jenis, mis. Kertas" />
+            <${ListEditor} label="Jenis pengeluaran produksi" items=${f.saranProduksi || []} onChange=${setList('saranProduksi')} placeholder="Tambah jenis, mis. Ongkos cetak" />
+            <div class="border-t border-line pt-4 sm:col-span-2">
+              <p class="text-sm font-bold">Cadangan data</p>
+              <p class="text-xs text-mute">Ekspor menyimpan semua pesanan dan pengaturan ke satu file JSON. Isi file tidak terenkripsi, jadi simpan di tempat yang aman. Impor menggantikan seluruh data saat ini.</p>
+              <div class="mt-2 flex flex-wrap gap-2">
+                <button type="button" class=${btnGhost} onClick=${onExport}><${Icon} name="download" size=${16} /> Ekspor data</button>
+                <label class="${btnGhost} cursor-pointer"><${Icon} name="file" size=${16} /> Pilih file impor<input type="file" accept="application/json,.json" class="sr-only" onChange=${pickFile} /></label>
+              </div>
+              ${imp && imp.error && html`<p role="alert" class="mt-2 text-sm font-medium text-bad">${imp.error}</p>`}
+              ${imp && imp.ok && html`
+                <div class="mt-3 rounded-lg bg-warn-soft p-3 text-sm text-warn">
+                  <p class="font-semibold">File berisi ${imp.orders.length} pesanan. Impor akan menggantikan ${orderCount} pesanan yang ada sekarang.</p>
+                  <div class="mt-2 flex gap-2">
+                    <button type="button" class="${btn} bg-warn text-white" onClick=${() => onImport(imp)}>Impor dan ganti</button>
+                    <button type="button" class=${btnGhost} onClick=${() => setImp(null)}>Batal</button>
+                  </div>
+                </div>`}
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center justify-between gap-3 border-t border-line px-5 py-4">
+            ${!allowDemo ? html`<span></span>` : confirmReset
+              ? html`<div class="flex items-center gap-2 text-sm"><span class="text-bad">Semua pesanan diganti data contoh.</span>
+                  <button class="${btn} bg-bad text-on-accent" onClick=${onReset}>Ya, reset</button>
+                  <button class=${btnGhost} onClick=${() => setConfirmReset(false)}>Batal</button></div>`
+              : html`<button class=${btnGhost} onClick=${() => setConfirmReset(true)}><${Icon} name="reset" size=${16} /> Reset ke data contoh</button>`}
+            <div class="flex gap-2">
+              <button class=${btnGhost} onClick=${onClose}>Batal</button>
+              <button class=${btnPrimary} onClick=${() => onSave(f)}><${Icon} name="check" size=${16} /> Simpan</button>
+            </div>
+          </div>
+        </div>
+      <//>`;
+  }
+
+  /* ======================================================================
+     KEAMANAN: autentikasi dan enkripsi data (lokal, di browser)
+     - Password tidak pernah disimpan. Yang disimpan: salt acak + verifier hasil PBKDF2-SHA256 (600.000 iterasi) lalu HKDF.
+     - Data pesanan dan pengaturan dienkripsi AES-GCM 256-bit dengan kunci turunan password; kunci hanya ada di memori.
+     - Pembatasan percobaan, sesi hanya di memori, kunci otomatis saat tidak aktif.
+     Seluruh bagian ini diganti Supabase Auth saat aplikasi dihosting sendiri (lihat panduan-supabase.md).
+     ====================================================================== */
+  const SECURE_KEY = 'aksara.secure.v1';
+  const LOCK_KEY = 'aksara.lock.v1';
+  const PBKDF2_ITER = 600000;
+  const TEMP_USER = 'admin';
+  const TEMP_PASSWORD = 'admin12'; // sementara: wajib diganti saat masuk pertama kali
+  const IDLE_MS = 15 * 60 * 1000;
+  const te = new TextEncoder();
+  const td = new TextDecoder();
+  const b64 = (u8) => { let t = ''; u8.forEach((x) => { t += String.fromCharCode(x); }); return btoa(t); };
+  const unb64 = (str) => Uint8Array.from(atob(str), (c) => c.charCodeAt(0));
+  const rand = (n) => crypto.getRandomValues(new Uint8Array(n));
+  const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+  const ctEqual = (a, b) => { if (a.length !== b.length) return false; let d = 0; for (let i = 0; i < a.length; i++) d |= a[i] ^ b[i]; return d === 0; };
+  const hasCrypto = () => !!(window.crypto && crypto.subtle && window.isSecureContext !== false);
+
+  async function makeKeys(password, saltB64, iter) {
+    const base = await crypto.subtle.importKey('raw', te.encode(password.normalize('NFKC')), 'PBKDF2', false, ['deriveBits']);
+    const master = await crypto.subtle.deriveBits({ name: 'PBKDF2', hash: 'SHA-256', salt: unb64(saltB64), iterations: iter }, base, 256);
+    const hk = await crypto.subtle.importKey('raw', master, 'HKDF', false, ['deriveBits', 'deriveKey']);
+    const zero = new Uint8Array(32);
+    const verifier = new Uint8Array(await crypto.subtle.deriveBits({ name: 'HKDF', hash: 'SHA-256', salt: zero, info: te.encode('aksara/auth') }, hk, 256));
+    const key = await crypto.subtle.deriveKey({ name: 'HKDF', hash: 'SHA-256', salt: zero, info: te.encode('aksara/enc') }, hk, { name: 'AES-GCM', length: 256 }, false, ['encrypt', 'decrypt']);
+    return { verifier, key };
+  }
+  async function seal(key, label, value) {
+    const iv = rand(12);
+    const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv, additionalData: te.encode(label) }, key, te.encode(JSON.stringify(value)));
+    return { iv: b64(iv), ct: b64(new Uint8Array(ct)) };
+  }
+  async function unseal(key, label, blob) {
+    const pt = await crypto.subtle.decrypt({ name: 'AES-GCM', iv: unb64(blob.iv), additionalData: te.encode(label) }, key, unb64(blob.ct));
+    return JSON.parse(td.decode(pt));
+  }
+  const readSecure = () => { try { const v = localStorage.getItem(SECURE_KEY); return v ? JSON.parse(v) : null; } catch (e) { return null; } };
+  const writeSecure = (rec) => localStorage.setItem(SECURE_KEY, JSON.stringify(rec));
+  const readLock = () => { try { return JSON.parse(localStorage.getItem(LOCK_KEY)) || { fails: 0, until: 0 }; } catch (e) { return { fails: 0, until: 0 }; } };
+  const writeLock = (l) => { try { localStorage.setItem(LOCK_KEY, JSON.stringify(l)); } catch (e) { /* abaikan */ } };
+  const registerFail = () => {
+    const l = readLock();
+    l.fails += 1;
+    if (l.fails % 5 === 0) l.until = Date.now() + Math.min(15 * 60 * 1000, 30000 * 2 ** (l.fails / 5 - 1));
+    writeLock(l);
+    return l;
+  };
+
+  // Catatan akun dibuat acak per perangkat: salt unik, password sementara tidak pernah tersimpan sebagai teks
+  async function ensureAuthRecord() {
+    const cur = readSecure();
+    if (cur && cur.auth) return cur;
+    const salt = b64(rand(16));
+    const { verifier } = await makeKeys(TEMP_PASSWORD, salt, PBKDF2_ITER);
+    const rec = { v: 1, auth: { user: TEMP_USER, salt, iter: PBKDF2_ITER, verifier: b64(verifier), mustChange: true, createdAt: Date.now() }, data: null };
+    writeSecure(rec);
+    return rec;
+  }
+
+  // Selalu menjalankan PBKDF2 penuh, baik username benar maupun salah (waktu proses sama)
+  async function authenticate(username, password) {
+    const lock = readLock();
+    if (lock.until > Date.now()) return { ok: false, locked: lock.until };
+    const rec = readSecure();
+    const t0 = Date.now();
+    const { verifier, key } = await makeKeys(password, rec.auth.salt, rec.auth.iter);
+    const pad = (t) => te.encode(String(t).padEnd(64).slice(0, 64));
+    const userOk = ctEqual(pad(username.trim().toLowerCase()), pad(rec.auth.user));
+    const passOk = ctEqual(verifier, unb64(rec.auth.verifier));
+    if (!(userOk && passOk)) {
+      const l = registerFail();
+      await sleep(Math.max(0, 600 - (Date.now() - t0)));
+      return { ok: false, locked: l.until > Date.now() ? l.until : 0 };
+    }
+    writeLock({ fails: 0, until: 0 });
+    return { ok: true, rec, key };
+  }
+
+  const COMMON_PW = ['password', 'password1', 'password123', '12345678', '123456789', '1234567890', 'qwerty123', 'qwertyuiop', 'admin123', 'admin1234', 'admin12', 'administrator', 'letmein123', 'welcome123', 'iloveyou', 'passw0rd', 'abc12345', 'aksara', 'undangan', 'percetakan'];
+  const isWeakPw = (pw, user) => {
+    const low = pw.toLowerCase();
+    return !pw || COMMON_PW.some((c) => low === c || low === c + '!') || low.includes(String(user).toLowerCase()) || /^(.)\1+$/.test(pw) || '0123456789'.includes(low) || 'abcdefghijklmnopqrstuvwxyz'.includes(low);
+  };
+  const pwChecks = (pw, user) => [
+    { ok: pw.length >= 10, label: 'Minimal 10 karakter' },
+    { ok: /[a-z]/.test(pw) && /[A-Z]/.test(pw), label: 'Huruf besar dan huruf kecil' },
+    { ok: /\d/.test(pw), label: 'Minimal satu angka' },
+    { ok: pw.length > 0 && !isWeakPw(pw, user) && pw.length <= 128, label: 'Bukan password umum dan tidak memuat username' },
+  ];
+  const pwScore = (pw) => (pw.length >= 10 ? 1 : 0) + (pw.length >= 14 ? 1 : 0) + (/[a-z]/.test(pw) && /[A-Z]/.test(pw) && /\d/.test(pw) ? 1 : 0) + (/[^A-Za-z0-9]/.test(pw) ? 1 : 0);
+  const PW_LABEL = ['Sangat lemah', 'Lemah', 'Cukup', 'Kuat', 'Sangat kuat'];
+
+  async function openData(rec, key) {
+    if (!rec.data) return { orders: initOrders(), settings: { ...DEFAULT_SETTINGS } };
+    return { orders: await unseal(key, 'orders', rec.data.orders), settings: { ...DEFAULT_SETTINGS, ...(await unseal(key, 'settings', rec.data.settings)) } };
+  }
+
+  // Sesi: kunci enkripsi hanya hidup di memori; penyimpanan diserialkan agar tidak saling menimpa
+  function createSession(rec0, key0, data) {
+    let rec = rec0, key = key0, queue = Promise.resolve();
+    const cache = { orders: data.orders, settings: data.settings };
+    const run = (fn) => { const p = queue.then(fn); queue = p.catch(() => {}); return p; };
+    const api = {
+      user: rec.auth.user,
+      onSaveError: null,
+      initial: { orders: data.orders, settings: data.settings },
+      save: (label, value) => { cache[label] = value; return run(async () => { const blob = await seal(key, label, value); rec = { ...rec, data: { ...(rec.data || {}), [label]: blob } }; writeSecure(rec); }).catch((e) => { if (api.onSaveError) api.onSaveError(e); }); },
+      flush: () => queue,
+      changePassword: (current, next) => run(async () => {
+        const lock = readLock();
+        if (lock.until > Date.now()) return { ok: false, error: 'Terlalu banyak percobaan. Coba lagi beberapa saat lagi.' };
+        const cur = await makeKeys(current, rec.auth.salt, rec.auth.iter);
+        if (!ctEqual(cur.verifier, unb64(rec.auth.verifier))) { registerFail(); return { ok: false, error: 'Password saat ini salah.' }; }
+        if (!pwChecks(next, rec.auth.user).every((c) => c.ok)) return { ok: false, error: 'Password baru belum memenuhi syarat.' };
+        const salt = b64(rand(16));
+        const nk = await makeKeys(next, salt, PBKDF2_ITER);
+        const dataBlobs = { orders: await seal(nk.key, 'orders', cache.orders), settings: await seal(nk.key, 'settings', cache.settings) };
+        const newRec = { v: 1, auth: { ...rec.auth, salt, iter: PBKDF2_ITER, verifier: b64(nk.verifier), mustChange: false, changedAt: Date.now() }, data: dataBlobs };
+        writeSecure(newRec);
+        rec = newRec; key = nk.key;
+        writeLock({ fails: 0, until: 0 });
+        return { ok: true };
+      }),
+    };
+    return api;
+  }
+
+  // Masuk pertama kali: ganti password sementara lalu pindahkan data lama (tersimpan polos) ke penyimpanan terenkripsi
+  async function firstChange(tempPassword, next) {
+    const rec = readSecure();
+    const cur = await makeKeys(tempPassword, rec.auth.salt, rec.auth.iter);
+    if (!ctEqual(cur.verifier, unb64(rec.auth.verifier))) return { ok: false, error: 'Sesi tidak valid. Muat ulang halaman lalu masuk lagi.' };
+    if (!pwChecks(next, rec.auth.user).every((c) => c.ok)) return { ok: false, error: 'Password baru belum memenuhi syarat.' };
+    const salt = b64(rand(16));
+    const nk = await makeKeys(next, salt, PBKDF2_ITER);
+    const data = { orders: initOrders(), settings: { ...DEFAULT_SETTINGS, ...load(KEY_S, {}) } };
+    const newRec = { v: 1, auth: { ...rec.auth, salt, iter: PBKDF2_ITER, verifier: b64(nk.verifier), mustChange: false, changedAt: Date.now() },
+      data: { orders: await seal(nk.key, 'orders', data.orders), settings: await seal(nk.key, 'settings', data.settings) } };
+    try { writeSecure(newRec); } catch (e) { return { ok: false, error: 'Penyimpanan browser penuh atau tidak tersedia.' }; }
+    [KEY_O, KEY_O_V2, KEY_O_V1, KEY_S].forEach((k) => { try { localStorage.removeItem(k); } catch (e) { /* abaikan */ } });
+    return { ok: true, session: createSession(newRec, nk.key, data) };
+  }
+  const wipeDevice = () => { [SECURE_KEY, LOCK_KEY, KEY_O, KEY_O_V2, KEY_O_V1, KEY_S].forEach((k) => { try { localStorage.removeItem(k); } catch (e) { /* abaikan */ } }); };
+
+  /* ---------- Layar login ---------- */
+  function AuthShell({ title, subtitle, children }) {
+    return html`
+      <div class="grid min-h-screen place-items-center bg-bg px-4 py-10">
+        <div class="w-full max-w-sm">
+          <div class="mb-7 flex flex-col items-center text-center">
+            <p class="font-serif text-5xl font-semibold italic leading-none tracking-wide text-accent">Layera Story</p>
+            <span class="mt-4 block h-px w-16 bg-accent/40"></span>
+            <h1 class="mt-4 font-serif text-2xl font-semibold leading-tight">${title}</h1>
+            ${subtitle && html`<p class="mt-1 text-sm text-mute">${subtitle}</p>`}
+          </div>
+          <div class="rounded-2xl border border-line bg-surface p-6 shadow-sm">${children}</div>
+        </div>
+      </div>`;
+  }
+
+  function PasswordField({ label, value, onChange, autoComplete, autoFocus }) {
+    const [show, setShow] = useState(false);
+    return html`
+      <div>
+        <span class="mb-1 block text-xs font-semibold text-mute">${label}</span>
+        <div class="relative">
+          <input type=${show ? 'text' : 'password'} class="${inp} pr-10" value=${value} onChange=${(e) => onChange(e.target.value)} aria-label=${label}
+            autoComplete=${autoComplete} autoFocus=${autoFocus} spellCheck="false" autoCapitalize="none" maxLength="128" />
+          <button type="button" tabIndex="-1" onClick=${() => setShow(!show)} aria-label=${show ? 'Sembunyikan password' : 'Tampilkan password'}
+            class="absolute right-1 top-1/2 -translate-y-1/2 rounded p-1.5 text-mute hover:text-ink"><${Icon} name=${show ? 'eye-off' : 'eye'} size=${16} /></button>
+        </div>
+      </div>`;
+  }
+
+  function LoginScreen({ onLogin, notice, onReset, onEmailReset }) {
+    const [user, setUser] = useState('');
+    const [pw, setPw] = useState('');
+    const [busy, setBusy] = useState(false);
+    const [err, setErr] = useState('');
+    const [lockUntil, setLockUntil] = useState(() => readLock().until);
+    const [now, setNow] = useState(Date.now());
+    const [forgot, setForgot] = useState(false);
+    const [confirmText, setConfirmText] = useState('');
+    const [emailBusy, setEmailBusy] = useState(false);
+    const [emailMsg, setEmailMsg] = useState('');
+    const sendReset = async () => { setEmailBusy(true); setEmailMsg(''); const r = await onEmailReset(); setEmailMsg(r && r.error ? r.error : 'Jika email terdaftar, tautan reset sudah dikirim. Periksa kotak masuk dan folder spam.'); setEmailBusy(false); };
+    useEffect(() => {
+      if (lockUntil <= Date.now()) return undefined;
+      const t = setInterval(() => setNow(Date.now()), 500);
+      return () => clearInterval(t);
+    }, [lockUntil]);
+    const remaining = Math.max(0, Math.ceil((lockUntil - now) / 1000));
+    const locked = remaining > 0;
+    const submit = async (e) => {
+      e.preventDefault();
+      if (busy || locked || !user.trim() || !pw) return;
+      setBusy(true); setErr('');
+      const r = await onLogin(user, pw);
+      setPw('');
+      if (!r.ok) {
+        setErr(r.error || 'Username atau password salah.');
+        if (r.locked) { setLockUntil(r.locked); setNow(Date.now()); }
+      }
+      setBusy(false);
+    };
+    return html`
+      <${AuthShell} title="Masuk" subtitle="Dashboard pesanan dan keuangan">
+        <form onSubmit=${submit} class="space-y-4" autoComplete="on">
+          ${notice && html`<p role="status" class="rounded-lg bg-accent-soft px-3 py-2 text-sm font-medium text-accent">${notice}</p>`}
+          <div>
+            <span class="mb-1 block text-xs font-semibold text-mute">Username</span>
+            <input class=${inp} value=${user} onChange=${(e) => setUser(e.target.value)} aria-label="Username" name="username" autoComplete="username" autoCapitalize="none" spellCheck="false" autoFocus />
+          </div>
+          <${PasswordField} label="Password" value=${pw} onChange=${setPw} autoComplete="current-password" />
+          ${err && !locked && html`<p role="alert" class="text-sm font-medium text-bad">${err}</p>`}
+          ${locked && html`<p role="alert" class="rounded-lg bg-warn-soft px-3 py-2 text-sm font-medium text-warn">Terlalu banyak percobaan gagal. Coba lagi dalam ${remaining >= 60 ? Math.floor(remaining / 60) + ' menit ' : ''}${remaining % 60} detik.</p>`}
+          <button type="submit" class="${btnPrimary} w-full" disabled=${busy || locked}><${Icon} name="lock" size=${16} /> ${busy ? 'Memeriksa...' : 'Masuk'}</button>
+        </form>
+        <div class="mt-4 border-t border-line pt-3 text-center">
+          <button type="button" class="text-xs font-semibold text-mute hover:text-ink" onClick=${() => setForgot(!forgot)}>Lupa password?</button>
+          ${forgot && (onEmailReset ? html`
+            <div class="mt-3 space-y-2 text-left text-xs text-mute">
+              <p>Tautan untuk membuat password baru akan dikirim ke email admin yang terdaftar.</p>
+              <button type="button" class="${btn} w-full border border-line bg-surface text-ink hover:bg-tint" disabled=${emailBusy} onClick=${sendReset}>${emailBusy ? 'Mengirim...' : 'Kirim tautan reset'}</button>
+              ${emailMsg && html`<p role="status" class="font-medium text-accent">${emailMsg}</p>`}
+            </div>` : html`
+            <div class="mt-3 space-y-2 text-left text-xs text-mute">
+              <p>Data terenkripsi tidak bisa dibuka tanpa password, dan tidak ada pemulihan otomatis. Satu-satunya cara adalah menghapus data di browser ini dan mulai dari awal (password kembali ke bawaan).</p>
+              <input class=${inp} value=${confirmText} onChange=${(e) => setConfirmText(e.target.value)} placeholder="Ketik HAPUS untuk konfirmasi" aria-label="Konfirmasi hapus data" />
+              <button type="button" class="${btn} w-full border border-line bg-surface text-bad hover:bg-tint" disabled=${confirmText !== 'HAPUS'} onClick=${onReset}>Hapus data di browser ini</button>
+            </div>`)}
+        </div>
+      <//>`;
+  }
+
+  function ChangePasswordForm({ askCurrent, onSubmit, onCancel, submitLabel = 'Simpan password' }) {
+    const [cur, setCur] = useState('');
+    const [nw, setNw] = useState('');
+    const [cf, setCf] = useState('');
+    const [err, setErr] = useState('');
+    const [busy, setBusy] = useState(false);
+    const checks = pwChecks(nw, TEMP_USER);
+    const score = nw ? pwScore(nw) : 0;
+    const submit = async (e) => {
+      e.preventDefault();
+      if (busy) return;
+      setErr('');
+      if (askCurrent && !cur) { setErr('Isi password saat ini.'); return; }
+      if (!checks.every((c) => c.ok)) { setErr('Password baru belum memenuhi semua syarat.'); return; }
+      if (nw !== cf) { setErr('Konfirmasi password tidak sama.'); return; }
+      if (askCurrent && nw === cur) { setErr('Password baru harus berbeda dari password saat ini.'); return; }
+      setBusy(true);
+      const r = await onSubmit(cur, nw);
+      setBusy(false);
+      if (r && !r.ok) { setErr(r.error || 'Gagal mengganti password.'); setCur(''); }
+    };
+    const barCls = (i) => (i < score ? (score <= 1 ? 'bg-bad' : score === 2 ? 'bg-warn' : 'bg-good') : 'bg-line');
+    return html`
+      <form onSubmit=${submit} class="space-y-4">
+        ${askCurrent && html`<${PasswordField} label="Password saat ini" value=${cur} onChange=${setCur} autoComplete="current-password" autoFocus />`}
+        <${PasswordField} label="Password baru" value=${nw} onChange=${setNw} autoComplete="new-password" autoFocus=${!askCurrent} />
+        ${nw && html`
+          <div>
+            <div class="flex gap-1" aria-hidden="true">${[0, 1, 2, 3].map((i) => html`<span key=${i} class=${'h-1.5 flex-1 rounded-full ' + barCls(i)}></span>`)}</div>
+            <p class="mt-1 text-xs text-mute">Kekuatan: <span class="font-semibold text-ink">${PW_LABEL[score]}</span></p>
+          </div>`}
+        <ul class="space-y-1 text-xs">
+          ${checks.map((c) => html`<li key=${c.label} class=${'flex items-center gap-1.5 ' + (c.ok ? 'text-good' : 'text-mute')}><${Icon} name=${c.ok ? 'check' : 'x'} size=${13} />${c.label}</li>`)}
+        </ul>
+        <${PasswordField} label="Ulangi password baru" value=${cf} onChange=${setCf} autoComplete="new-password" />
+        ${err && html`<p role="alert" class="text-sm font-medium text-bad">${err}</p>`}
+        <div class="flex justify-end gap-2">
+          ${onCancel && html`<button type="button" class=${btnGhost} onClick=${onCancel}>Batal</button>`}
+          <button type="submit" class=${btnPrimary + (onCancel ? '' : ' w-full')} disabled=${busy}><${Icon} name="check" size=${16} /> ${busy ? 'Menyimpan...' : submitLabel}</button>
+        </div>
+      </form>`;
+  }
+
+  function Root() {
+    const [phase, setPhase] = useState('boot');
+    const [session, setSession] = useState(null);
+    const [temp, setTemp] = useState(null);
+    const [notice, setNotice] = useState('');
+    const [fatal, setFatal] = useState('');
+    const boot = async () => {
+      if (!hasCrypto()) { setFatal('Browser ini tidak mendukung enkripsi (butuh koneksi HTTPS dan browser terbaru).'); return; }
+      try { await ensureAuthRecord(); setPhase('login'); } catch (e) { setFatal('Penyimpanan browser tidak tersedia. Nonaktifkan mode privat atau izinkan penyimpanan situs.'); }
+    };
+    useEffect(() => { boot(); }, []);
+    const login = async (u, p) => {
+      const r = await authenticate(u, p);
+      if (!r.ok) return r.locked ? { ok: false, locked: r.locked, error: 'Terlalu banyak percobaan gagal.' } : { ok: false, error: 'Username atau password salah.' };
+      if (r.rec.auth.mustChange) { setTemp(p); setNotice(''); setPhase('force'); return { ok: true }; }
+      try {
+        const data = await openData(r.rec, r.key);
+        setSession(createSession(r.rec, r.key, data)); setNotice(''); setPhase('app');
+        return { ok: true };
+      } catch (e) {
+        return { ok: false, error: 'Data terenkripsi tidak dapat dibuka. Tidak ada data yang diubah atau dihapus.' };
+      }
+    };
+    const first = async (_cur, next) => {
+      const r = await firstChange(temp, next);
+      if (r.ok) { setTemp(null); setSession(r.session); setPhase('app'); }
+      return r;
+    };
+    const logout = async (why) => {
+      if (session) { try { await session.flush(); } catch (e) { /* abaikan */ } }
+      setSession(null); setTemp(null);
+      setNotice(why === 'idle' ? 'Sesi dikunci karena tidak ada aktivitas.' : '');
+      setPhase('login');
+    };
+    const reset = async () => { wipeDevice(); setPhase('boot'); await boot(); };
+
+    if (fatal) return html`<${AuthShell} title="Tidak dapat dibuka"><p class="text-sm text-bad">${fatal}</p><//>`;
+    if (phase === 'boot') return html`<${AuthShell} title="Menyiapkan..."><p class="text-center text-sm text-mute">Memeriksa penyimpanan aman.</p><//>`;
+    if (phase === 'login') return html`<${LoginScreen} onLogin=${login} notice=${notice} onReset=${reset} />`;
+    if (phase === 'force') {
+      return html`
+        <${AuthShell} title="Buat password baru" subtitle="Password sementara hanya untuk masuk pertama kali">
+          <${ChangePasswordForm} askCurrent=${false} submitLabel="Simpan dan masuk" onSubmit=${first} />
+        <//>`;
+    }
+    return html`<${App} session=${session} onLogout=${logout} />`;
+  }
+
+  /* ---------- Cadangan data: validasi file impor ---------- */
+  function parseBackup(text) {
+    let d;
+    try { d = JSON.parse(text); } catch (e) { return { error: 'File bukan JSON yang valid.' }; }
+    if (!d || typeof d !== 'object' || !Array.isArray(d.orders)) return { error: 'Format file tidak dikenali (tidak ada daftar pesanan).' };
+    if (d.orders.length > 20000) return { error: 'File terlalu besar.' };
+    const ids = new Set();
+    const orders = [];
+    for (const o of d.orders) {
+      if (!o || typeof o !== 'object' || typeof o.id !== 'string' || !o.id.trim() || !/^\d{4}-\d{2}-\d{2}$/.test(String(o.tanggal || ''))) return { error: 'Ada pesanan dengan nomor invoice atau tanggal yang tidak valid.' };
+      if (ids.has(o.id)) return { error: 'Ada nomor invoice ganda: ' + o.id };
+      ids.add(o.id);
+      orders.push({ ...o, status: STATUS[o.status] ? o.status : 'belum', items: Array.isArray(o.items) ? o.items : [], expenses: Array.isArray(o.expenses) ? o.expenses : [] });
+    }
+    const st = d.settings && typeof d.settings === 'object' ? d.settings : {};
+    const settings = { ...DEFAULT_SETTINGS };
+    Object.keys(DEFAULT_SETTINGS).forEach((k) => {
+      const v = st[k];
+      if (Array.isArray(DEFAULT_SETTINGS[k])) { if (Array.isArray(v) && v.every((x) => typeof x === 'string')) settings[k] = v; }
+      else if (typeof v === 'string') settings[k] = v;
+    });
+    return { ok: true, orders, settings };
+  }
+
+  /* ======================================================================
+     MODE SUPABASE (aktif bila config.js berisi SUPABASE_URL dan SUPABASE_ANON_KEY)
+     Password diperiksa di server Supabase (Auth); data disimpan di tabel dengan Row Level Security.
+     ====================================================================== */
+  const emailFor = (u) => {
+    const t = String(u || '').trim();
+    if (t.includes('@')) return t;
+    const map = { admin: CFG.ADMIN_EMAIL, ...(CFG.USERNAME_EMAIL || {}) };
+    return map[t.toLowerCase()] || '';
+  };
+  async function loadSB(sb) {
+    const o = await sb.from('orders').select('data').order('tanggal', { ascending: false });
+    if (o.error) throw o.error;
+    const st = await sb.from('settings').select('data').maybeSingle();
+    if (st.error) throw st.error;
+    return { orders: (o.data || []).map((r) => r.data), settings: { ...DEFAULT_SETTINGS, ...((st.data && st.data.data) || {}) } };
+  }
+  function createSBSession(sb, user, data) {
+    const seen = new Map(data.orders.map((o) => [o.id, JSON.stringify(o)]));
+    let queue = Promise.resolve();
+    const run = (fn) => { const p = queue.then(fn); queue = p.catch(() => {}); return p; };
+    const api = {
+      user: 'admin',
+      onSaveError: null,
+      initial: { orders: data.orders, settings: data.settings },
+      // Hanya baris yang berubah yang dikirim ke server; baris yang dihapus ikut dihapus di server
+      save: (label, value) => run(async () => {
+        if (label === 'orders') {
+          const changed = value.filter((o) => seen.get(o.id) !== JSON.stringify(o));
+          const keep = new Set(value.map((o) => o.id));
+          const removed = [...seen.keys()].filter((id) => !keep.has(id));
+          if (changed.length) {
+            const { error } = await sb.from('orders').upsert(changed.map((o) => ({ id: o.id, owner: user.id, tanggal: o.tanggal, data: o })), { onConflict: 'id' });
+            if (error) throw error;
+            changed.forEach((o) => seen.set(o.id, JSON.stringify(o)));
+          }
+          if (removed.length) {
+            const { error } = await sb.from('orders').delete().in('id', removed);
+            if (error) throw error;
+            removed.forEach((id) => seen.delete(id));
+          }
+        } else {
+          const { error } = await sb.from('settings').upsert({ owner: user.id, data: value }, { onConflict: 'owner' });
+          if (error) throw error;
+        }
+      }).catch((e) => { if (api.onSaveError) api.onSaveError(e); }),
+      flush: () => queue,
+      changePassword: (current, next) => run(async () => {
+        if (!pwChecks(next, 'admin').every((c) => c.ok)) return { ok: false, error: 'Password baru belum memenuhi syarat.' };
+        const re = await sb.auth.signInWithPassword({ email: user.email, password: current });
+        if (re.error) return { ok: false, error: 'Password saat ini salah.' };
+        const up = await sb.auth.updateUser({ password: next });
+        if (up.error) return { ok: false, error: 'Gagal mengganti password: ' + up.error.message };
+        return { ok: true };
+      }),
+    };
+    return api;
+  }
+
+  function RootSB() {
+    const [phase, setPhase] = useState('boot');
+    const [session, setSession] = useState(null);
+    const [notice, setNotice] = useState('');
+    const [fatal, setFatal] = useState('');
+    const sbRef = useRef(null);
+    const recovering = useRef(false);
+
+    const enter = async (user) => {
+      if (user.user_metadata && user.user_metadata.must_change === true) { setPhase('force'); return { ok: true }; }
+      try {
+        const data = await loadSB(sbRef.current);
+        setSession(createSBSession(sbRef.current, user, data)); setNotice(''); setPhase('app');
+        return { ok: true };
+      } catch (e) {
+        return { ok: false, error: 'Gagal memuat data dari Supabase. Periksa konfigurasi tabel dan kebijakan akses.' };
+      }
+    };
+    useEffect(() => {
+      (async () => {
+        if (!window.supabase || !window.supabase.createClient) { setFatal('Pustaka Supabase gagal dimuat. Periksa koneksi internet lalu muat ulang halaman.'); return; }
+        try {
+          const sb = window.supabase.createClient(CFG.SUPABASE_URL, CFG.SUPABASE_ANON_KEY, { auth: { persistSession: true, autoRefreshToken: true, detectSessionInUrl: true } });
+          sbRef.current = sb;
+          sb.auth.onAuthStateChange((event) => { if (event === 'PASSWORD_RECOVERY') { recovering.current = true; setPhase('recover'); } });
+          const { data } = await sb.auth.getSession();
+          if (recovering.current) return;
+          if (data && data.session) { const r = await enter(data.session.user); if (!r.ok) { setNotice(r.error); setPhase('login'); } }
+          else setPhase('login');
+        } catch (e) { setFatal('Tidak dapat terhubung ke Supabase. Periksa SUPABASE_URL dan SUPABASE_ANON_KEY di config.js.'); }
+      })();
+    }, []);
+
+    const login = async (u, p) => {
+      const lock = readLock();
+      if (lock.until > Date.now()) return { ok: false, locked: lock.until, error: 'Terlalu banyak percobaan gagal.' };
+      const email = emailFor(u);
+      const t0 = Date.now();
+      const res = email ? await sbRef.current.auth.signInWithPassword({ email, password: p }) : { error: true };
+      if (res.error || !res.data || !res.data.user) {
+        const l = registerFail();
+        await sleep(Math.max(0, 600 - (Date.now() - t0)));
+        return { ok: false, locked: l.until > Date.now() ? l.until : 0, error: 'Username atau password salah.' };
+      }
+      writeLock({ fails: 0, until: 0 });
+      return enter(res.data.user);
+    };
+    const setNew = async (_cur, next) => {
+      if (!pwChecks(next, 'admin').every((c) => c.ok)) return { ok: false, error: 'Password baru belum memenuhi syarat.' };
+      const up = await sbRef.current.auth.updateUser({ password: next, data: { must_change: false } });
+      if (up.error || !up.data || !up.data.user) return { ok: false, error: 'Gagal menyimpan password baru: ' + (up.error ? up.error.message : 'tidak ada respons') };
+      recovering.current = false;
+      const r = await enter(up.data.user);
+      return r.ok ? { ok: true } : r;
+    };
+    const logout = async (why) => {
+      if (session) { try { await session.flush(); } catch (e) { /* abaikan */ } }
+      try { await sbRef.current.auth.signOut(); } catch (e) { /* abaikan */ }
+      setSession(null);
+      setNotice(why === 'idle' ? 'Sesi dikunci karena tidak ada aktivitas.' : '');
+      setPhase('login');
+    };
+    const emailReset = async () => {
+      const email = emailFor('admin');
+      if (!email) return { error: 'ADMIN_EMAIL belum diisi di config.js.' };
+      const r = await sbRef.current.auth.resetPasswordForEmail(email, { redirectTo: window.location.origin });
+      return r.error ? { error: 'Gagal mengirim tautan reset: ' + r.error.message } : { ok: true };
+    };
+
+    if (fatal) return html`<${AuthShell} title="Tidak dapat dibuka"><p class="text-sm text-bad">${fatal}</p><//>`;
+    if (phase === 'boot') return html`<${AuthShell} title="Menyiapkan..."><p class="text-center text-sm text-mute">Menghubungkan ke server.</p><//>`;
+    if (phase === 'login') return html`<${LoginScreen} onLogin=${login} notice=${notice} onEmailReset=${emailReset} />`;
+    if (phase === 'force' || phase === 'recover') {
+      return html`
+        <${AuthShell} title="Buat password baru" subtitle=${phase === 'recover' ? 'Masukkan password baru untuk akun Anda' : 'Password sementara hanya untuk masuk pertama kali'}>
+          <${ChangePasswordForm} askCurrent=${false} submitLabel="Simpan dan masuk" onSubmit=${setNew} />
+        <//>`;
+    }
+    return html`<${App} session=${session} onLogout=${logout} />`;
+  }
+
+  /* ---------- Aplikasi ---------- */
+  function App({ session, onLogout }) {
+    const [orders, setOrders] = useState(() => session.initial.orders);
+    const [settings, setSettings] = useState(() => ({ ...DEFAULT_SETTINGS, ...session.initial.settings }));
+    const [showPw, setShowPw] = useState(false);
+    const [q, setQ] = useState('');
+    const [filter, setFilter] = useState('semua');
+    const [year, setYear] = useState(() => todayISO().slice(0, 4));
+    const [month, setMonth] = useState(() => todayISO().slice(5, 7));
+    const [page, setPage] = useState(1);
+    const [remDismissed, setRemDismissed] = useState(false);
+    const [tab, setTab] = useState('pesanan');
+    const [ym, setYm] = useState(() => todayISO().slice(0, 7));
+    const [progFilter, setProgFilter] = useState('semua');
+    const [form, setForm] = useState(null);        // { editing: order|null }
+    const [invoice, setInvoice] = useState(null);
+    const [delTarget, setDelTarget] = useState(null);
+    const [showSettings, setShowSettings] = useState(false);
+    const [toast, setToast] = useState('');
+
+    useEffect(() => { session.onSaveError = () => setToast('Gagal menyimpan data. Periksa koneksi atau ruang penyimpanan.'); }, []);
+    useEffect(() => { session.save('orders', orders); }, [orders]);
+    useEffect(() => { session.save('settings', settings); }, [settings]);
+    // Kunci otomatis saat tidak ada aktivitas
+    useEffect(() => {
+      let last = Date.now();
+      const bump = () => { last = Date.now(); };
+      const evs = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'scroll', 'wheel'];
+      evs.forEach((e) => window.addEventListener(e, bump, { passive: true }));
+      const t = setInterval(() => { if (Date.now() - last > IDLE_MS) onLogout('idle'); }, 5000);
+      return () => { evs.forEach((e) => window.removeEventListener(e, bump)); clearInterval(t); };
+    }, []);
+    const hariHCount = orders.filter((o) => o.tanggalAcara && daysUntil(o.tanggalAcara) === 0).length;
+    useEffect(() => { document.title = (hariHCount ? `(${hariHCount}) Hari H hari ini - ` : '') + 'Layera Story'; }, [hariHCount]);
+    useEffect(() => { if (!toast) return; const t = setTimeout(() => setToast(''), 2600); return () => clearTimeout(t); }, [toast]);
+
+    const sorted = useMemo(() => [...orders].sort((a, b) => (b.tanggal + b.id).localeCompare(a.tanggal + a.id)), [orders]);
+    const years = useMemo(() => {
+      const m = {};
+      orders.forEach((o) => { const y = o.tanggal.slice(0, 4); m[y] = (m[y] || 0) + 1; });
+      const cy = todayISO().slice(0, 4);
+      if (!m[cy]) m[cy] = 0;
+      return Object.keys(m).sort().reverse().map((k) => ({ key: k, count: m[k] }));
+    }, [orders]);
+    const activeYear = year === 'semua' || years.some((y) => y.key === year) ? year : 'semua';
+    const months = useMemo(() => {
+      if (activeYear === 'semua') return [];
+      const m = {};
+      orders.filter((o) => o.tanggal.slice(0, 4) === activeYear).forEach((o) => { const k = o.tanggal.slice(5, 7); m[k] = (m[k] || 0) + 1; });
+      if (activeYear === todayISO().slice(0, 4)) { const cm = todayISO().slice(5, 7); if (!m[cm]) m[cm] = 0; }
+      return Object.keys(m).sort().map((k) => ({ key: k, count: m[k] }));
+    }, [orders, activeYear]);
+    const activeMonth = activeYear !== 'semua' && months.some((m) => m.key === month) ? month : 'semua';
+    const periodLabel = activeYear === 'semua' ? 'semua periode' : activeMonth === 'semua' ? `tahun ${activeYear}` : `${MONTHS[Number(activeMonth) - 1]} ${activeYear}`;
+
+    const scoped = useMemo(() => sorted.filter((o) =>
+      (activeYear === 'semua' || o.tanggal.slice(0, 4) === activeYear) &&
+      (activeMonth === 'semua' || o.tanggal.slice(5, 7) === activeMonth)), [sorted, activeYear, activeMonth]);
+    const rows = useMemo(() => {
+      const k = q.trim().toLowerCase();
+      return scoped.filter((o) => (filter === 'semua' || o.status === filter) && (progFilter === 'semua' || progressOf(o).key === progFilter) &&
+        (!k || [o.id, o.nama, itemsText(o), o.wa, kodeFor(o)].some((x) => String(x || '').toLowerCase().includes(k)) ||
+          (k.length >= 10 && k.includes(kodeFor(o).toLowerCase()))));
+    }, [scoped, q, filter, progFilter]);
+    const scan = useMemo(() => {
+      const k = q.trim().toUpperCase();
+      if (k.length < 20) return null;
+      const o = orders.find((x) => k.includes(kodeFor(x)));
+      const cek = k.match(/CEK ([A-Z0-9]{6})/);
+      if (!o || !cek) return null;
+      const st = (k.match(/STATUS (LUNAS|DP|BELUM BAYAR)/) || [])[1];
+      return { o, valid: cek[1] === qrSig(o), st };
+    }, [q, orders]);
+    const counts = useMemo(() => ({ semua: scoped.length, lunas: scoped.filter((o) => o.status === 'lunas').length, dp: scoped.filter((o) => o.status === 'dp').length, belum: scoped.filter((o) => o.status === 'belum').length }), [scoped]);
+
+    // Kembali ke halaman 1 saat pencarian, filter status, atau periode berubah
+    useEffect(() => { setPage(1); }, [q, filter, progFilter, activeYear, activeMonth]);
+    const pageCount = Math.max(1, Math.ceil(rows.length / PAGE_SIZE));
+    const curPage = Math.min(page, pageCount);
+    const pageRows = rows.slice((curPage - 1) * PAGE_SIZE, curPage * PAGE_SIZE);
+    const goPage = (n) => {
+      setPage(n);
+      const el = document.getElementById('daftar-pesanan');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+
+    const saveOrder = (data, editing) => {
+      setOrders((prev) => (editing ? prev.map((o) => (o.id === editing.id ? data : o)) : [data, ...prev]));
+      const y = data.tanggal.slice(0, 4), m = data.tanggal.slice(5, 7);
+      if (activeYear !== 'semua' && activeYear !== y) setYear(y);
+      if (activeMonth !== 'semua' && (activeYear !== y || activeMonth !== m)) setMonth(m);
+      setForm(null);
+      setToast(editing ? 'Pesanan diperbarui' : 'Pesanan disimpan');
+    };
+    const setProgress = (id, key) => {
+      setOrders((p) => p.map((o) => (o.id === id ? { ...o, progress: key } : o)));
+      setToast('Status pekerjaan: ' + PROGRESS.find((x) => x.key === key).label);
+    };
+    const reportYears = useMemo(() => {
+      const set = new Set(orders.map((o) => o.tanggal.slice(0, 4)));
+      set.add(todayISO().slice(0, 4)); set.add(ym.slice(0, 4));
+      return [...set].sort().reverse();
+    }, [orders, ym]);
+    const openInvoice = (o) => setInvoice(o);
+    const exportData = async () => {
+      const bytes = new TextEncoder().encode(JSON.stringify({ app: 'layera-story-dashboard', version: 1, exportedAt: new Date().toISOString(), orders, settings }, null, 2));
+      try { await saveFile(`cadangan-${todayISO()}.json`, bytes, 'application/json'); setToast('Cadangan siap disimpan'); }
+      catch (e) { setToast(e && e.code === 'declined' ? 'Unduhan dibatalkan' : 'Gagal membuat cadangan'); }
+    };
+    const importData = (d) => { setOrders(d.orders); setSettings(d.settings); setShowSettings(false); setToast(`${d.orders.length} pesanan diimpor`); };
+    const removeOrder = () => { setOrders((p) => p.filter((o) => o.id !== delTarget.id)); setDelTarget(null); setToast('Pesanan dihapus'); };
+
+    const chip = (k, label) => html`
+      <button key=${k} onClick=${() => setFilter(k)}
+        class="whitespace-nowrap rounded-full border px-3 py-1.5 text-xs font-semibold transition-colors ${filter === k ? 'border-accent bg-accent text-on-accent' : 'border-line bg-surface text-mute hover:text-ink'}">
+        ${label} <span class="tabular-nums opacity-80">${counts[k]}</span>
+      </button>`;
+
+    return html`
+      <div>
+        <div class=${tab === 'laporan' ? '' : 'no-print'}>
+          <header class="no-print sticky z-30 border-b border-line bg-surface/95 backdrop-blur" style=${{ top: 'env(safe-area-inset-top, 0px)' }}>
+            <div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 md:px-6">
+              <div class="flex min-w-0 items-center gap-3">
+                <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full border-2 border-accent font-serif text-xl font-semibold text-accent">${(settings.nama || 'A').trim().charAt(0).toUpperCase()}</div>
+                <div class="min-w-0">
+                  <p class="truncate font-serif text-xl font-semibold leading-none">${settings.nama}</p>
+                  <p class="mt-0.5 truncate text-xs text-mute">Dashboard pesanan dan keuangan</p>
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <button class="${btnGhost} !px-2.5" onClick=${() => setShowSettings(true)} aria-label="Pengaturan usaha"><${Icon} name="settings" size=${18} /></button>
+                <button class="${btnGhost} !px-2.5" onClick=${() => setShowPw(true)} aria-label="Ganti password"><${Icon} name="key" size=${18} /></button>
+                <button class=${btnGhost} onClick=${() => onLogout()} aria-label="Keluar"><${Icon} name="log-out" size=${18} /><span class="hidden sm:inline">Keluar</span></button>
+                <button class=${btnPrimary} onClick=${() => setForm({ editing: null })}><${Icon} name="plus" size=${16} /> Pesanan baru</button>
+              </div>
+            </div>
+            <nav class="mx-auto flex max-w-7xl gap-1 px-4 md:px-6" aria-label="Menu utama">
+              ${[['pesanan', 'Pesanan', 'clipboard'], ['laporan', 'Laporan keuangan', 'chart']].map(([k, l, ic]) => html`
+                <button key=${k} onClick=${() => setTab(k)} aria-current=${tab === k ? 'page' : null}
+                  class=${'-mb-px inline-flex items-center gap-2 border-b-2 px-3 py-2.5 text-sm font-semibold transition-colors ' + (tab === k ? 'border-accent text-accent' : 'border-transparent text-mute hover:text-ink')}>
+                  <${Icon} name=${ic} size=${16} />${l}
+                </button>`)}
+            </nav>
+          </header>
+
+          ${tab === 'laporan' ? html`
+            <main class="print-flush mx-auto max-w-[230mm] space-y-4 px-4 py-5 md:px-6 md:py-8">
+              <${ReportControls} ym=${ym} onYm=${setYm} years=${reportYears} />
+              <${ReportView} orders=${orders} settings=${settings} ym=${ym} />
+            </main>` : html`
+          <main class="mx-auto max-w-7xl space-y-5 px-4 py-5 md:px-6 md:py-8">
+            ${!remDismissed && html`<${ReminderBar} orders=${orders} onInvoice=${openInvoice} onDismiss=${() => setRemDismissed(true)} />`}
+            <${PeriodBar} years=${years} months=${months} year=${activeYear} month=${activeMonth} total=${orders.length}
+              onYear=${(y) => { setYear(y); setMonth('semua'); }} onMonth=${setMonth} />
+            <${Summary} orders=${scoped} label=${periodLabel} />
+
+            <section id="daftar-pesanan" class="scroll-mt-20 rounded-2xl border border-line bg-surface" aria-label="Daftar pesanan">
+              <div class="flex flex-col gap-3 border-b border-line p-4 md:flex-row md:items-center md:justify-between">
+                <h2 class="text-base font-bold">Daftar pesanan</h2>
+                <div class="flex flex-col gap-3 md:flex-row md:items-center">
+                  <div class="flex gap-2 overflow-x-auto pb-1 md:pb-0">${chip('semua', 'Semua')}${chip('lunas', 'Lunas')}${chip('dp', 'DP')}${chip('belum', 'Belum bayar')}</div>
+                  <select class="${inp} md:!w-44" aria-label="Filter status pekerjaan" value=${progFilter} onChange=${(e) => setProgFilter(e.target.value)}>
+                    <option value="semua">Semua pekerjaan</option>
+                    ${PROGRESS.map((x) => html`<option key=${x.key} value=${x.key}>${x.label}</option>`)}
+                  </select>
+                  <div class="relative md:w-64">
+                    <span class="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-mute"><${Icon} name="search" size=${16} /></span>
+                    <input class="${inp} pl-9" placeholder="Cari klien, invoice, kode, produk" value=${q} onChange=${(e) => setQ(e.target.value)} aria-label="Cari pesanan" />
+                  </div>
+                </div>
+              </div>
+              ${scan && html`
+                <div role="status" class="mx-4 mt-3 rounded-lg px-3 py-2 text-sm font-medium ${scan.valid ? 'bg-good-soft text-good' : 'bg-warn-soft text-warn'}">
+                  ${scan.valid
+                    ? `QR cocok dengan ${scan.o.id}. Status terkini: ${STATUS[scan.o.status].label}.`
+                    : `QR ${scan.o.id} berasal dari versi lama${scan.st ? ` (status saat itu: ${scan.st})` : ''}. Status terkini: ${STATUS[scan.o.status].label}. Cetak ulang invoice ini.`}
+                </div>`}
+              <${OrderList} rows=${pageRows} allRows=${rows} onInvoice=${openInvoice} onEdit=${(o) => setForm({ editing: o })} onDelete=${setDelTarget} onProgress=${setProgress} />
+              <${Pagination} page=${curPage} pageCount=${pageCount} total=${rows.length} size=${PAGE_SIZE} onPage=${goPage} />
+            </section>
+          </main>`}
+        </div>
+
+        ${form && html`<${OrderForm} orders=${orders} editing=${form.editing} settings=${settings} onSave=${saveOrder} onClose=${() => setForm(null)} />`}
+        ${invoice && html`<${InvoiceModal} key=${invoice.id} o=${orders.find((x) => x.id === invoice.id) || invoice} s=${settings} onClose=${() => setInvoice(null)} />`}
+        ${showSettings && html`<${SettingsModal} settings=${settings}
+            onSave=${(v) => { setSettings(v); setShowSettings(false); setToast('Pengaturan disimpan'); }}
+            allowDemo=${SEED_DEMO && !WANT_SB} orderCount=${orders.length} onExport=${exportData} onImport=${importData}
+            onReset=${() => { setOrders(seedOrders()); setShowSettings(false); setToast('Data contoh dipulihkan'); }}
+            onClose=${() => setShowSettings(false)} />`}
+        ${showPw && html`
+          <${Modal} onClose=${() => setShowPw(false)} closeOnBackdrop=${false} width="max-w-md">
+            <div class="rounded-2xl border border-line bg-surface p-5 sm:mt-16">
+              <div class="mb-4 flex items-center justify-between">
+                <h2 class="text-lg font-bold">Ganti password</h2>
+                <button class="rounded-lg p-2 text-mute hover:bg-tint" onClick=${() => setShowPw(false)} aria-label="Tutup"><${Icon} name="x" /></button>
+              </div>
+              <${ChangePasswordForm} askCurrent=${true} onCancel=${() => setShowPw(false)}
+                onSubmit=${async (cur, next) => { const r = await session.changePassword(cur, next); if (r.ok) { setShowPw(false); setToast('Password berhasil diganti'); } return r; }} />
+            </div>
+          <//>`}
+        ${delTarget && html`
+          <${Modal} onClose=${() => setDelTarget(null)} width="max-w-md">
+            <div class="m-4 rounded-2xl border border-line bg-surface p-5 sm:mt-24">
+              <h2 class="text-lg font-bold">Hapus pesanan ini?</h2>
+              <p class="mt-2 text-sm text-mute">${delTarget.id} atas nama ${delTarget.nama} akan dihapus beserta rincian biayanya. Tindakan ini tidak bisa dibatalkan.</p>
+              <div class="mt-5 flex justify-end gap-2">
+                <button class=${btnGhost} onClick=${() => setDelTarget(null)}>Batal</button>
+                <button class="${btn} bg-bad text-on-accent hover:opacity-90" onClick=${removeOrder}>Hapus pesanan</button>
+              </div>
+            </div>
+          <//>`}
+        ${toast && html`<div class="no-print fixed bottom-6 left-1/2 z-[60] -translate-x-1/2 rounded-full bg-ink px-4 py-2 text-sm font-semibold text-surface shadow-lg" role="status">${toast}</div>`}
+      </div>`;
+  }
+
+  ReactDOM.createRoot(document.getElementById('root')).render(React.createElement(WANT_SB ? RootSB : Root));
+})();
+</script>
+</body>
+</html>
