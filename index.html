@@ -1381,12 +1381,11 @@ ${(o.items || []).map((l, i) => html`
         <section class="mt-6 rounded-lg bg-accent-soft p-4 text-sm">
           <p class="mb-1 font-bold">Instruksi pembayaran</p>
           <p>Transfer ke <span class="font-semibold">${s.bank} ${s.rekening}</span> a.n. ${s.atasNama}</p>
-          <p class="mt-1 text-mute">Cantumkan nomor invoice ${o.id} pada berita transfer, lalu kirim bukti transfer melalui WhatsApp.</p>
           ${s.catatan && html`<p class="mt-2 text-mute">${s.catatan}</p>`}
         </section>
 
         <footer class="mt-auto flex flex-col-reverse gap-8 pt-12 sm:flex-row sm:items-end sm:justify-between">
-          <p class="max-w-xs font-serif text-base italic text-mute">Terima kasih telah mempercayakan undangan hari bahagia Anda kepada kami.</p>
+          <p class="max-w-xs font-serif text-base italic text-mute">Terima kasih telah mempercayakan hari bahagia Anda kepada kami.</p>
           <div class="flex flex-col items-center text-center text-sm">
             <p class="text-mute">Disahkan oleh</p>
             <div class="mt-2 rounded border border-line bg-white p-1.5"><${QrCode} value=${qrPayload(o)} /></div>
@@ -1526,7 +1525,6 @@ ${(o.items || []).map((l, i) => html`
     const bw = W - 2 * M - 24;
     const blocks = [
       { k: 'Instruksi pembayaran', lines: [{ t: `Transfer ke ${s.bank} ${s.rekening} a.n. ${s.atasNama}`, font: F.b, size: 10 }] },
-      { k: null, lines: wrap(`Cantumkan nomor invoice ${o.id} pada berita transfer, lalu kirim bukti transfer melalui WhatsApp.`, F.r, 9, bw).map((t) => ({ t, font: F.r, size: 9, color: C.mute })) },
     ];
     if (s.catatan) blocks.push({ k: null, lines: wrap(s.catatan, F.r, 9, bw).map((t) => ({ t, font: F.r, size: 9, color: C.mute })) });
     const bh = blocks.reduce((a, b2) => a + (b2.k ? 12 : 0) + b2.lines.reduce((x, ln) => x + ln.size + 3, 0) + 6, 0) + 14;
@@ -1545,7 +1543,7 @@ ${(o.items || []).map((l, i) => html`
     if (y < M + 170) newPage();
     const fb = M;                       // dasar penutup
     const fy = fb + 150;                // atas penutup
-    wrap('Terima kasih telah mempercayakan undangan hari bahagia Anda kepada kami.', F.si, 12, 230).forEach((t, i) => text(t, M, fy - 12 - i * 15, { size: 12, font: F.si, color: C.mute }));
+    wrap('Terima kasih telah mempercayakan hari bahagia Anda kepada kami.', F.si, 12, 230).forEach((t, i) => text(t, M, fy - 12 - i * 15, { size: 12, font: F.si, color: C.mute }));
     const cx = W - M - 62;
     text('Disahkan oleh', cx, fy, { size: 9, color: C.mute, align: 'center' });
     const box = 104;
