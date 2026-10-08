@@ -1343,8 +1343,7 @@
           </div>
           <dl class="grid grid-cols-[auto_1fr] gap-x-6 gap-y-1.5 text-sm sm:justify-self-end">
             <dt class="text-mute">Tanggal order</dt><dd class="text-right font-medium">${fmtDate(o.tanggal)}</dd>
-            <dt class="text-mute">Deadline pengerjaan</dt><dd class="text-right font-medium">${fmtDate(o.deadline)}</dd>
-            <dt class="text-mute">Status pembayaran</dt><dd class="text-right"><${Badge} status=${o.status} /></dd>
+                        <dt class="text-mute">Status pembayaran</dt><dd class="text-right"><${Badge} status=${o.status} /></dd>
           </dl>
         </section>
 
@@ -1458,7 +1457,7 @@ ${(o.items || []).map((l, i) => html`
     if (o.wa) { text(o.wa, M, y, { size: 9.5 }); y -= 12; }
     if (o.alamat) wrap(o.alamat, F.r, 9, 250).forEach((l) => { text(l, M, y, { size: 9, color: C.mute }); y -= 11; });
     let ry = top;
-    [['Tanggal order', fmtDate(o.tanggal), C.ink], ['Deadline pengerjaan', fmtDate(o.deadline), C.ink], ['Status pembayaran', STATUS[o.status].label, stColor]].forEach(([k, v, col]) => {
+    [['Tanggal order', fmtDate(o.tanggal), C.ink], ['Status pembayaran', STATUS[o.status].label, stColor]].forEach(([k, v, col]) => {
       text(k, W - M - 175, ry, { size: 9, color: C.mute });
       text(v, W - M, ry, { size: 9.5, font: F.b, color: col, align: 'right' });
       ry -= 15;
