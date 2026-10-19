@@ -13,7 +13,7 @@
 <title>Layera Story</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;0,700;1,500&family=Noto+Serif+SC:wght@600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
   const tok = (n) => `rgb(var(--${n}) / <alpha-value>)`;
@@ -59,6 +59,30 @@
   .scroll-white::-webkit-scrollbar-thumb { background: #D9CFBD; border-radius: 9999px; border: 2px solid #ffffff; }
   .scroll-white::-webkit-scrollbar-thumb:hover { background: #C9BCA4; }
   .scroll-white::-webkit-scrollbar-corner { background: #ffffff; }
+
+  /* ---- Tema cat air: naga, phoenix, dan latar watercolor ---- */
+  .wc-page { background: #F1E3D1 url(bg-watercolor-desktop.jpg) center / cover no-repeat; }
+  .art { position: absolute; pointer-events: none; mix-blend-mode: multiply; background-repeat: no-repeat; background-size: 100% 100%; }
+  .art-naga { background-image: url(naga.jpg); aspect-ratio: 1248 / 1458; left: -10px; top: 50%; transform: translateY(-50%); height: min(700px, 86vh); }
+  .art-phoenix { background-image: url(phoenix.jpg); aspect-ratio: 1272 / 1768; right: -10px; top: 50%; transform: translateY(-50%); height: min(780px, 92vh); }
+  .proverb-zh { font-family: "Noto Serif SC", "Cormorant Garamond", serif; font-weight: 600; letter-spacing: 0.16em; }
+  @media (max-width: 767px) {
+    .wc-page { background-image: url(bg-watercolor-mobile.jpg); }
+    .art-naga { top: 16px; transform: none; left: -22px; height: 250px; }
+    .art-phoenix { top: 4px; transform: none; right: -18px; height: 272px; }
+  }
+  body.in-app { background: #F1E3D1 url(bg-watercolor-desktop.jpg) center / cover fixed no-repeat; }
+  body.in-app #root { position: relative; z-index: 1; }
+  body.in-app::before, body.in-app::after { content: ""; position: fixed; top: 50%; transform: translateY(-50%); pointer-events: none; mix-blend-mode: multiply; background-repeat: no-repeat; background-size: 100% 100%; opacity: 0.75; z-index: 0; }
+  body.in-app::before { background-image: url(naga.jpg); aspect-ratio: 1248 / 1458; height: min(86vh, 64vw); right: calc(50% - 35px); }
+  body.in-app::after { background-image: url(phoenix.jpg); aspect-ratio: 1272 / 1768; height: min(90vh, 76vw); left: calc(50% - 35px); }
+  body.in-app main .bg-surface { background-color: rgb(255 252 246 / 0.74); }
+  body.in-app main.print-flush .bg-surface { background-color: rgb(255 255 255); }
+  @media print {
+    body.in-app::before, body.in-app::after { display: none; }
+    body.in-app { background: #fff !important; }
+    body.in-app main .bg-surface { background-color: #fff; }
+  }
   button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible { outline: 2px solid rgb(var(--accent)); outline-offset: 2px; }
 
   /* Lembar invoice selalu terang, apa pun tema perangkat */
@@ -1828,15 +1852,21 @@ ${(o.items || []).map((l, i) => html`
   /* ---------- Layar login ---------- */
   function AuthShell({ title, subtitle, children }) {
     return html`
-      <div class="grid min-h-screen place-items-center bg-bg px-4 py-10">
-        <div class="w-full max-w-sm">
+      <div class="wc-page relative grid min-h-screen place-items-center overflow-hidden px-4 pb-10 pt-[270px] md:py-10">
+        <div class="art art-naga" role="img" aria-label="Ilustrasi naga"></div>
+        <div class="art art-phoenix" role="img" aria-label="Ilustrasi phoenix"></div>
+        <div class="relative z-10 w-full max-w-sm">
           <div class="mb-7 flex flex-col items-center text-center">
             <img src="logo.png" alt="Layera Story" class="h-24 w-auto max-w-full select-none" draggable="false" />
             <span class="mt-4 block h-px w-16 bg-accent/40"></span>
             <h1 class="mt-4 font-serif text-2xl font-semibold leading-tight">${title}</h1>
             ${subtitle && html`<p class="mt-1 text-sm text-mute">${subtitle}</p>`}
           </div>
-          <div class="rounded-2xl border border-line bg-surface p-6 shadow-sm">${children}</div>
+          <div class="rounded-2xl border border-line bg-surface/85 p-6 shadow-sm">${children}</div>
+          <div class="mt-7 text-center">
+            <p lang="zh" class="proverb-zh text-2xl text-ink">执子之手，与子偕老</p>
+            <p class="mt-2 font-serif text-lg italic text-ink">“Menggenggam tanganmu, menua bersamamu.”</p>
+          </div>
         </div>
       </div>`;
   }
@@ -2191,6 +2221,7 @@ ${(o.items || []).map((l, i) => html`
     const [showSettings, setShowSettings] = useState(false);
     const [toast, setToast] = useState('');
 
+    useEffect(() => { document.body.classList.add('in-app'); return () => document.body.classList.remove('in-app'); }, []);
     useEffect(() => { session.onSaveError = () => setToast('Gagal menyimpan data. Periksa koneksi atau ruang penyimpanan.'); }, []);
     useEffect(() => { session.save('orders', orders); }, [orders]);
     useEffect(() => { session.save('settings', settings); }, [settings]);
@@ -2349,6 +2380,10 @@ ${(o.items || []).map((l, i) => html`
               <${OrderList} rows=${pageRows} allRows=${rows} onInvoice=${openInvoice} onEdit=${(o) => setForm({ editing: o })} onDelete=${setDelTarget} onProgress=${setProgress} />
               <${Pagination} page=${curPage} pageCount=${pageCount} total=${rows.length} size=${PAGE_SIZE} onPage=${goPage} />
             </section>
+            <div class="no-print pb-2 pt-4 text-center">
+              <p lang="zh" class="proverb-zh text-xl text-ink">执子之手，与子偕老</p>
+              <p class="mt-1 font-serif text-base italic text-ink">“Menggenggam tanganmu, menua bersamamu.”</p>
+            </div>
           </main>`}
         </div>
 
