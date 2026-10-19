@@ -60,8 +60,8 @@
   /* ---- Tema cat air: naga, phoenix, dan latar watercolor ---- */
   .wc-page { background: #F1E3D1 url(bg-watercolor-desktop.jpg) center / cover no-repeat; }
   .art { position: absolute; pointer-events: none; mix-blend-mode: multiply; background-repeat: no-repeat; background-size: 100% 100%; }
-  .art-naga { background-image: url(naga.jpg); aspect-ratio: 1248 / 1458; left: -10px; top: 50%; transform: translateY(-50%); height: min(700px, 86vh); }
-  .art-phoenix { background-image: url(phoenix.jpg); aspect-ratio: 1272 / 1768; right: -10px; top: 50%; transform: translateY(-50%); height: min(780px, 92vh); }
+  .art-naga { background-image: url(naga.jpg); aspect-ratio: 1248 / 1458; left: -10px; top: 50%; transform: translateY(-50%); height: min(700px, 86vh, 46.7vw); }
+  .art-phoenix { background-image: url(phoenix.jpg); aspect-ratio: 1272 / 1768; right: -10px; top: 50%; transform: translateY(-50%); height: min(780px, 92vh, 55.5vw); }
   .proverb-zh { font-family: "Noto Serif SC", "Cormorant Garamond", serif; font-weight: 600; letter-spacing: 0.16em; }
   @media (max-width: 767px) {
     .wc-page { background-image: url(bg-watercolor-mobile.jpg); }
@@ -71,8 +71,8 @@
   body.in-app { background: #F1E3D1 url(bg-watercolor-desktop.jpg) center / cover fixed no-repeat; }
   body.in-app #root { position: relative; z-index: 1; }
   body.in-app::before, body.in-app::after { content: ""; position: fixed; top: 50%; transform: translateY(-50%); pointer-events: none; mix-blend-mode: multiply; background-repeat: no-repeat; background-size: 100% 100%; opacity: 0.75; z-index: 0; }
-  body.in-app::before { background-image: url(naga.jpg); aspect-ratio: 1248 / 1458; height: min(86vh, 64vw); right: calc(50% - 35px); }
-  body.in-app::after { background-image: url(phoenix.jpg); aspect-ratio: 1272 / 1768; height: min(90vh, 76vw); left: calc(50% - 35px); }
+  body.in-app::before { background-image: url(naga.jpg); aspect-ratio: 1248 / 1458; height: min(700px, 86vh, 46.7vw); left: -10px; }
+  body.in-app::after { background-image: url(phoenix.jpg); aspect-ratio: 1272 / 1768; height: min(780px, 92vh, 55.5vw); right: -10px; }
   body.in-app main .bg-surface { background-color: rgb(255 252 246 / 0.74); }
   body.in-app main.print-flush .bg-surface { background-color: rgb(255 255 255); }
   @media print {
