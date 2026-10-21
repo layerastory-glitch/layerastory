@@ -1154,9 +1154,8 @@
       <article class="sheet mx-auto w-full max-w-[210mm] rounded-sm border border-line bg-surface p-6 text-ink shadow-sm sm:p-[14mm]">
         <header class="flex flex-wrap items-start justify-between gap-4 border-b-2 border-accent pb-5">
           <div class="flex items-center gap-3">
-            <div class="grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 border-accent font-serif text-2xl font-semibold text-accent">${(settings.nama || 'A').trim().charAt(0).toUpperCase()}</div>
             <div>
-              <p class="font-serif text-2xl font-semibold leading-none">${settings.nama}</p>
+              <p class="font-serif text-3xl font-semibold leading-none">${settings.nama}</p>
               <p class="mt-1 text-xs text-mute">${settings.tagline}</p>
               <p class="text-xs text-mute">${settings.alamat}</p>
             </div>
@@ -1344,9 +1343,8 @@
       <article class="sheet mx-auto flex min-h-[297mm] w-full max-w-[210mm] flex-col rounded-sm bg-surface p-6 text-ink shadow-xl sm:p-[14mm]">
         <header class="flex items-start justify-between gap-4 border-b-2 border-accent pb-5">
           <div class="flex items-center gap-3">
-            <div class="grid h-12 w-12 shrink-0 place-items-center rounded-full border-2 border-accent font-serif text-2xl font-semibold text-accent">${initial}</div>
             <div>
-              <h1 class="font-serif text-2xl font-semibold leading-none sm:text-3xl">${s.nama}</h1>
+              <h1 class="font-serif text-3xl font-semibold leading-none sm:text-4xl">${s.nama}</h1>
               <p class="mt-1 text-xs text-mute">${s.tagline}</p>
               <p class="mt-1 text-xs text-mute">${s.alamat}</p>
               <p class="text-xs text-mute">${s.kontak}</p>
@@ -1463,15 +1461,13 @@ ${(o.items || []).map((l, i) => html`
     const stColor = o.status === 'lunas' ? C.good : o.status === 'dp' ? C.warn : C.bad;
 
     // Kop
-    page.drawCircle({ x: M + 20, y: y - 20, size: 20, borderColor: C.accent, borderWidth: 1.6 });
-    text((s.nama || 'A').trim().charAt(0).toUpperCase(), M + 20, y - 27, { size: 22, font: F.sb, color: C.accent, align: 'center' });
-    text(s.nama, M + 52, y - 14, { size: 19, font: F.sb });
-    text(s.tagline, M + 52, y - 27, { size: 8.5, color: C.mute });
-    text(s.alamat, M + 52, y - 38, { size: 8.5, color: C.mute });
-    text(s.kontak, M + 52, y - 48, { size: 8.5, color: C.mute });
+    text(s.nama, M, y - 18, { size: 24, font: F.sb });
+    text(s.tagline, M, y - 33, { size: 8.5, color: C.mute });
+    text(s.alamat, M, y - 44, { size: 8.5, color: C.mute });
+    text(s.kontak, M, y - 54, { size: 8.5, color: C.mute });
     text('Invoice', W - M, y - 20, { size: 28, font: F.sb, color: C.accent, align: 'right' });
     text('No. ' + o.id, W - M, y - 36, { size: 9, color: C.mute, align: 'right' });
-    y -= 62;
+    y -= 66;
     hline(y, C.accent, 1.6);
     y -= 24;
 
@@ -1850,8 +1846,9 @@ ${(o.items || []).map((l, i) => html`
         <div class="art art-phoenix" role="img" aria-label="Ilustrasi phoenix"></div>
         <div class="relative z-10 w-full max-w-sm">
           <div class="mb-7 flex flex-col items-center text-center">
-            <p class="font-serif text-5xl font-semibold italic leading-none tracking-wide text-accent">Layera Story</p>
-            <span class="mt-4 block h-px w-16 bg-accent/40"></span>
+            <p class="font-serif text-4xl font-semibold leading-none">Layera Story</p>
+            <p class="mt-2 text-[10px] font-medium tracking-[0.24em] text-mute">PERCETAKAN & UNDANGAN PERNIKAHAN</p>
+            <div class="mt-4 flex items-center gap-3"><span class="h-px w-9" style="background:#B8902F"></span><span lang="zh" class="proverb-zh text-base text-accent" style="letter-spacing:0.3em">龙凤呈祥</span><span class="h-px w-9" style="background:#B8902F"></span></div>
             <h1 class="mt-4 font-serif text-2xl font-semibold leading-tight">${title}</h1>
             ${subtitle && html`<p class="mt-1 text-sm text-mute">${subtitle}</p>`}
           </div>
@@ -2305,11 +2302,7 @@ ${(o.items || []).map((l, i) => html`
           <header class="no-print sticky z-30 border-b border-line bg-surface/95 backdrop-blur" style=${{ top: 'env(safe-area-inset-top, 0px)' }}>
             <div class="mx-auto flex max-w-7xl items-center justify-between gap-3 px-4 py-3 md:px-6">
               <div class="flex min-w-0 items-center gap-3">
-                <div class="grid h-10 w-10 shrink-0 place-items-center rounded-full border-2 border-accent font-serif text-xl font-semibold text-accent">${(settings.nama || 'A').trim().charAt(0).toUpperCase()}</div>
-                <div class="min-w-0">
-                  <p class="truncate font-serif text-xl font-semibold leading-none">${settings.nama}</p>
-                  <p class="mt-0.5 truncate text-xs text-mute">Dashboard pesanan dan keuangan</p>
-                </div>
+                <div class="min-w-0"><p class="truncate font-serif text-2xl font-semibold leading-none">${settings.nama}</p></div>
               </div>
               <div class="flex items-center gap-2">
                 <button class="${btnGhost} !px-2.5" onClick=${() => setShowSettings(true)} aria-label="Pengaturan usaha"><${Icon} name="settings" size=${18} /></button>
